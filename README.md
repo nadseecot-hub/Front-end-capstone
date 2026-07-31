@@ -1,25 +1,44 @@
 # Front-end Capstone
 
-This is my capstone project for the AI-Assisted Front-end Engineering Internship.
-It will grow throughout the internship as I complete each phase, and represents
-the final project I submit at the end of the program.
+A capstone project built throughout the AI-Assisted Front-end Engineering Internship.
+This repository is the final submission for the program, grown phase by phase as
+new concepts and features are introduced.
 
 ## Status
 
-🚧 In progress — currently in the Setup phase.
+🚧 **Setup phase** — repository initialized, tooling and conventions being established.
+No application code has been written yet.
 
 ## About This Project
 
-- Built using AI-assisted development workflows (Claude Code / Cursor)
-- Tech stack to be decided as the project develops
-- Development conventions and AI assistant rules are documented in `CLAUDE.md`
+- Built using AI-assisted development workflows (Claude Code, Cursor, etc.)
+- Tech stack will be chosen as the project evolves — see the [Progress Log](#progress-log) for the current state
+- Conventions and AI assistant working rules are documented in [`CLAUDE.md`](./CLAUDE.md)
+
+## Project Structure
+
+```
+.
+├── CLAUDE.md        # Working rules for AI assistants
+├── LICENSE          # MIT License
+├── README.md        # You are here
+├── .gitignore       # Ignored files and folders
+└── .gitattributes   # Git behavior (e.g. line endings)
+```
 
 ## Progress Log
 
-- [x] Repo initialized with README, LICENSE, and `.gitignore`
+- [x] Repository initialized with `README.md`, `LICENSE`, and `.gitignore`
 - [x] Added `CLAUDE.md` with AI assistant working rules
+- [ ] Choose tech stack and scaffold the project
 - [ ] Core features (to be added as phases progress)
+- [ ] Final polish and submission
+
+## Getting Started
+
+This project is in setup — there is nothing to run yet. Once a tech stack is
+selected, installation and run instructions will be added here.
 
 ## License
 
-This project is licensed under the MIT License — see the `LICENSE` file for details.
+This project is licensed under the MIT License — see the [`LICENSE`](./LICENSE) file for details.
