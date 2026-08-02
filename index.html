@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Style Profile</title>
+    <meta
+      name="description"
+      content="Tell us what you wear so we can pick accessories for you."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+
+    <!--
+      Plain HTML + React, no build step, no server.
+
+      - React + ReactDOM from esm.sh (ESM CDN).
+      - @babel/standalone in-browser transforms the inline JSX below so we
+        can write real React without a bundler. Trade-off: ~700KB of Babel
+        ships per page load. Fine for a learning project; drop it later
+        if you ever add a build step.
+      - The form's helpers (types.js) are imported as a native ESM module.
+    -->
+
+    <!-- Surface any module / render error visibly so the screen isn't silently black. -->
+    <script>
+      window.addEventListener("error", (e) => {
+        const box = document.getElementById("error-overlay");
+        if (!box) return;
+        box.hidden = false;
+        box.textContent = "Error: " + (e.message || "unknown");
+      });
+      window.addEventListener("unhandledrejection", (e) => {
+        const box = document.getElementById("error-overlay");
+        if (!box) return;
+        box.hidden = false;
+        box.textContent = "Error: " + (e.reason?.message || e.reason || "unknown");
+      });
+    </script>
+
+    <script type="module" src="./components/StyleProfileForm/types.js"></script>
+
+    <script type="text/babel" data-presets="react" data-type="module">
+      import { STEPS, INITIAL_VALUES, validateField, validateAll } from "./components/StyleProfileForm/types.js";
+      import * as React from "https://esm.sh/react@18.3.1";
+      import { createRoot } from "https://esm.sh/react-dom@18.3.1/client";
+
+      const { useState } = React;
+
+      function StepField({ step, value, onChange, error }) {
+        const invalid = Boolean(error);
+        const helpId = step.name + "-help";
+        const errorId = step.name + "-error";
+        const describedBy =
+          [step.help ? helpId : null, invalid ? errorId : null]
+            .filter(Boolean)
+            .join(" ") || undefined;
+
+        const common = {
+          id: step.name,
+          "aria-invalid": invalid || undefined,
+          "aria-describedby": describedBy,
+        };
+
+        let control;
+        if (step.kind === "select") {
+          control = (
+            <select {...common} value={value} onChange={(e) => onChange(e.target.value)}>
+              <option value="" disabled>Select…</option>
+              {step.options.map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+          );
+        } else if (step.kind === "checkbox") {
+          control = (
+            <label className="checkbox-row">
+              <input
+                type="checkbox"
+                checked={Boolean(value)}
+                onChange={(e) => onChange(e.target.checked)}
+              />
+              <span>{step.help}</span>
+            </label>
+          );
+        } else if (step.kind === "email") {
+          control = (
+            <input
+              {...common}
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+            />
+          );
+        } else if (step.kind === "number") {
+          control = (
+            <input
+              {...common}
+              type="number"
+              inputMode="decimal"
+              min={step.min}
+              max={step.max}
+              step={step.step ?? 1}
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+            />
+          );
+        }
+
+        return (
+          <fieldset>
+            {step.kind !== "checkbox" && <legend>{step.label}</legend>}
+            {control}
+            {step.kind !== "checkbox" && step.help ? (
+              <small id={helpId}>{step.help}</small>
+            ) : null}
+            {invalid ? (
+              <p id={errorId} role="alert">{error}</p>
+            ) : null}
+          </fieldset>
+        );
+      }
+
+      function StyleProfileForm() {
+        const [values, setValues] = useState(INITIAL_VALUES);
+        const [stepIndex, setStepIndex] = useState(0);
+        const [errors, setErrors] = useState({});
+        const [submitted, setSubmitted] = useState(false);
+
+        const step = STEPS[stepIndex];
+        const isLast = stepIndex === STEPS.length - 1;
+        const stepError = errors[step.name];
+
+        function updateField(name, value) {
+          setValues((prev) => ({ ...prev, [name]: value }));
+          setErrors((prev) => {
+            if (!prev[name]) return prev;
+            const next = { ...prev };
+            delete next[name];
+            return next;
+          });
+        }
+
+        function handleNext() {
+          const msg = validateField(step, values);
+          if (msg) {
+            setErrors((prev) => ({ ...prev, [step.name]: msg }));
+            return;
+          }
+          setStepIndex((i) => Math.min(i + 1, STEPS.length - 1));
+        }
+
+        function handleBack() {
+          setErrors((prev) => {
+            if (!prev[step.name]) return prev;
+            const next = { ...prev };
+            delete next[step.name];
+            return next;
+          });
+          setStepIndex((i) => Math.max(i - 1, 0));
+        }
+
+        function handleSubmit(e) {
+          e.preventDefault();
+          const allErrors = validateAll(values);
+          setErrors(allErrors);
+          if (Object.keys(allErrors).length === 0) {
+            setSubmitted(true);
+          } else {
+            const firstBadIndex = STEPS.findIndex((s) => allErrors[s.name]);
+            if (firstBadIndex >= 0) setStepIndex(firstBadIndex);
+          }
+        }
+
+        if (submitted) {
+          return (
+            <form className="success" aria-label="Style profile complete">
+              <output>
+                <h2>You're good to go</h2>
+                <p>We'll use your style profile to find accessories that match. Check back soon for picks just for you.</p>
+              </output>
+            </form>
+          );
+        }
+
+        return (
+          <form onSubmit={handleSubmit} aria-label="Style profile setup">
+            <header>
+              <p className="eyebrow">Style Profile</p>
+              <h1>Tell us what you wear</h1>
+              <ol aria-label={`Step ${stepIndex + 1} of ${STEPS.length}`}>
+                {STEPS.map((_, i) => (
+                  <li key={i} data-active={i <= stepIndex ? "true" : "false"} />
+                ))}
+              </ol>
+            </header>
+
+            <StepField
+              step={step}
+              value={values[step.name]}
+              onChange={(v) => updateField(step.name, v)}
+              error={stepError}
+            />
+
+            <nav>
+              <button
+                type="button"
+                className="secondary"
+                onClick={handleBack}
+                disabled={stepIndex === 0}
+              >
+                Back
+              </button>
+              {isLast ? (
+                <button type="submit" className="primary">Find my accessories</button>
+              ) : (
+                <button type="button" className="primary" onClick={handleNext}>Next</button>
+              )}
+            </nav>
+          </form>
+        );
+      }
+
+      const root = createRoot(document.getElementById("root"));
+      root.render(<StyleProfileForm />);
+    </script>
+
+    <!-- Babel Standalone. Loaded last so it can transform the script above. -->
+    <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
+  </head>
+  <body>
+    <main id="root"></main>
+    <pre id="error-overlay" hidden></pre>
+  </body>
+</html>
