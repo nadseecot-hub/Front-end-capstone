@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Style Preferences</title>
+  <style>
+    :root {
+      --bg: #f7f7f8;
+      --surface: #ffffff;
+      --text: #1a1a1a;
+      --text-muted: #5b5b66;
+      --border: #d9d9de;
+      --accent: #3b82f6;
+      --accent-text: #ffffff;
+      --focus: #93c5fd;
+      --radius: 10px;
+      --gap: 1rem;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 480px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+    }
+
+    h1 {
+      margin: 0 0 0.25rem;
+      font-size: 1.375rem;
+    }
+
+    .subtitle {
+      margin: 0 0 1.5rem;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    fieldset {
+      border: 0;
+      padding: 0;
+      margin: 0 0 var(--gap);
+    }
+
+    fieldset + fieldset {
+      margin-top: var(--gap);
+    }
+
+    legend {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      padding: 0;
+    }
+
+    .hint {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+
+    .option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.75rem 0.875rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .option:hover {
+      border-color: #b9b9c2;
+    }
+
+    .option input[type="radio"] {
+      margin-top: 0.2rem;
+      accent-color: var(--accent);
+    }
+
+    .option input[type="radio"]:checked + .option-body {
+      color: var(--text);
+    }
+
+    .option:has(input[type="radio"]:checked) {
+      border-color: var(--accent);
+      background: rgba(59, 130, 246, 0.06);
+    }
+
+    .option:has(input[type="radio"]:focus-visible) {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .option-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .option-title {
+      font-weight: 500;
+    }
+
+    .option-desc {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Style preferences</h1>
+    <p class="subtitle">Choose how the app should look.</p>
+
+    <form>
+      <fieldset>
+        <legend>Theme</legend>
+        <span class="hint">Pick a color mode for the interface.</span>
+
+        <div class="options" role="radiogroup" aria-label="Theme">
+          <label class="option">
+            <input type="radio" name="theme" value="light" />
+            <span class="option-body">
+              <span class="option-title">Light</span>
+              <span class="option-desc">A bright background with dark text.</span>
+            </span>
+          </label>
+
+          <label class="option">
+            <input type="radio" name="theme" value="dark" />
+            <span class="option-body">
+              <span class="option-title">Dark</span>
+              <span class="option-desc">A dark background that's easier on the eyes at night.</span>
+            </span>
+          </label>
+
+          <label class="option">
+            <input type="radio" name="theme" value="system" checked />
+            <span class="option-body">
+              <span class="option-title">System</span>
+              <span class="option-desc">Follow your operating system's setting.</span>
+            </span>
+          </label>
+        </div>
+      </fieldset>
+    </form>
+  </main>
+</body>
+</html>
