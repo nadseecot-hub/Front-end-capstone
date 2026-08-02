@@ -1,6 +1,6 @@
 # WORKFLOW.md
 
-## Round 1: Vague Prompt
+## Round 1: Vague Prompt.
 
 **Prompt used:** "Build a settings form for user style preferences."
 
@@ -17,8 +17,7 @@ blind, filling every gap with its own default assumptions.
 
 ## Round 2: Precise Prompt
 
-**Prompt used:** A plan-mode prompt specifying the exact fields, the
-react-hook-form + zod stack, WCAG 2.1 AA accessibility constraints, and a
+**Prompt used:** A plan-mode prompt specifying the exact fields, The HTML, Vanilla CSS and React Stack, WCAG 2.1 AA accessibility constraints, and a
 required verification step (write tests, run them, confirm they pass).
 
 This round achieved the desired outcome. It followed the stack and
