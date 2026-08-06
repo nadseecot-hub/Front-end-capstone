@@ -7,6 +7,10 @@ Thumbs.db
 # Local server caches (if you ever use one)
 .cache/
 
+# Environment files
+.env
+.env.*
+
 # In case any node tooling sneaks back in
 node_modules/
 package-lock.json
