@@ -90,14 +90,13 @@ changed where.
 
 ## Manual Improvements & Corrections
 
-<!-- 
-TODO: fill in with specific examples — e.g. a bug the AI introduced, a prompt 
-that didn't produce the right result and had to be corrected, a piece of 
-generated code that was rewritten by hand, or a design decision changed 
-after reviewing AI output.
--->
+- correct the UI and UX smoothness.
+- Auth Working and API Issue when sign-in/register.
+- File Structure mismatch Restore
+- Saved tutors shown even after logout, Solved that problem.
+- Testing and debugging Through Console and undertstand the problem.
+- end-to-end check
 
-*(to be added)*
 
 ---
 
