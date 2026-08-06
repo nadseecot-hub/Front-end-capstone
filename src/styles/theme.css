@@ -1,0 +1,45 @@
+﻿/* ==========================================================================
+   Design Tokens — Tutor Finder
+   --------------------------------------------------------------------------
+   This file defines the design system primitives as CSS custom properties
+   on :root. Components consume these tokens via var(--token-name).
+   Do not apply component styles here — keep this file token-only.
+   ========================================================================== */
+
+:root {
+  /* --------------------------------------------------------------------------
+     Color
+     -------------------------------------------------------------------------- */
+  --color-ink: #16263D;          /* navbar, headings, primary text            */
+  --color-parchment: #FAF6EF;    /* page background                           */
+  --color-amber: #E3A548;        /* primary accent / CTA ("bright future")    */
+  --color-amber-dark: #C88A2E;   /* CTA hover state                           */
+  --color-teal: #3F6E67;         /* secondary accent — subject/level badges  */
+  --color-star: #F0B429;         /* rating stars                              */
+  --color-text-muted: #6B6459;   /* secondary text, bios, meta                */
+  --color-surface: #FFFFFF;      /* card background                           */
+  --color-border: #E7E1D6;       /* card / input borders                      */
+
+  /* --------------------------------------------------------------------------
+     Typography
+     -------------------------------------------------------------------------- */
+  --font-display: 'Fraunces', Georgia, serif;          /* headings, names     */
+  --font-body: 'Inter', system-ui, sans-serif;         /* body, labels, btns  */
+
+  /* --------------------------------------------------------------------------
+     Spacing scale
+     -------------------------------------------------------------------------- */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+  --space-2xl: 64px;
+
+  /* --------------------------------------------------------------------------
+     Radius
+     -------------------------------------------------------------------------- */
+  --radius-card: 12px;
+  --radius-input: 8px;
+  --radius-pill: 999px;
+}
