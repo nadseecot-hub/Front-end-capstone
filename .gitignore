@@ -7,10 +7,14 @@ Thumbs.db
 # Local server caches (if you ever use one)
 .cache/
 
-# Environment files
+# Environment files (keep .env.example tracked for onboarding)
 .env
-.env.*
+.env.local
+.env.*.local
 
 # In case any node tooling sneaks back in
 node_modules/
 package-lock.json
+.next/
+out/
+*.tsbuildinfo

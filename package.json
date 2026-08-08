@@ -1,24 +1,29 @@
 {
-  "name": "front-end-capstone",
-  "version": "1.0.0",
-  "description": "A capstone project built throughout the AI-Assisted Front-end Engineering Internship.",
-  "main": "index.js",
+  "name": "tutorfinder",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "react": "^18.3.0",
-    "react-dom": "^18.3.0",
-    "react-router-dom": "^7.18.2",
-    "firebase": "^10.13.0"
+    "firebase": "^10.14.1",
+    "next": "^15.4.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.18.2"
   },
   "devDependencies": {
-    "@types/react": "^18.3.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.0",
-    "typescript": "^5.5.0",
-    "vite": "^5.3.0"
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "^15.4.0",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.13",
+    "typescript": "^5.5.4"
   }
 }

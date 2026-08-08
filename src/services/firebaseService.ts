@@ -1,9 +1,9 @@
 /* ==========================================================================
    Firebase Service
    --------------------------------------------------------------------------
-   Initializes the Firebase app + Firestore using values from Vite env vars
-   (import.meta.env.VITE_FIREBASE_*). Vite injects anything prefixed with
-   VITE_ at build time, so we never reference process.env here.
+  Initializes the Firebase app + Firestore using values from Next.js public
+  env vars (process.env.NEXT_PUBLIC_*). These values are available in the
+  browser bundle because they are explicitly prefixed for client use.
 
    To set this up:
      1. Create a project at https://console.firebase.google.com
@@ -33,22 +33,26 @@ import {
 } from "firebase/firestore";
 import { Tutor } from "./tutorService";
 
+declare const process: {
+  env: Record<string, string | undefined>;
+};
+
 /* -------------------------------------------------------------------------- */
 /*  Config                                                                    */
 /* -------------------------------------------------------------------------- */
 
 /**
- * Pulled from import.meta.env so Vite inlines them at build time.
+ * Pulled from process.env so Next.js inlines them at build time.
  * If a key is missing the app throws a clear error on first use rather
  * than failing silently later inside a Firestore call.
  */
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "demo-api-key",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "demo-project.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "demo-project",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "demo-project.appspot.com",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "1234567890",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:1234567890:web:abcdef123456",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "demo-api-key",
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "demo-project.firebaseapp.com",
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "demo-project",
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "demo-project.appspot.com",
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "1234567890",
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:1234567890:web:abcdef123456",
 };
 
 /**
@@ -72,7 +76,7 @@ const missingKeys = requiredKeys.filter(
 if (missingKeys.length > 0) {
   // eslint-disable-next-line no-console
   console.error(
-    "[firebaseService] Missing VITE_FIREBASE_* env vars:",
+    "[firebaseService] Missing NEXT_PUBLIC_FIREBASE_* env vars:",
     missingKeys.join(", "),
     "\nCopy .env.example to .env and fill in your Firebase project config."
   );

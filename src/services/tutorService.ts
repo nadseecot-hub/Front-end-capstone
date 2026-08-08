@@ -183,8 +183,9 @@ export const searchTutors = async (filters: TutorSearchFilters = {}): Promise<Tu
         filtered = filtered.filter(tutor => tutor.level === filters.level);
       }
 
-      if (filters.maxPrice !== undefined) {
-        filtered = filtered.filter(tutor => tutor.price <= filters.maxPrice);
+      const { maxPrice } = filters;
+      if (maxPrice !== undefined) {
+        filtered = filtered.filter(tutor => tutor.price <= maxPrice);
       }
 
       resolve(filtered);

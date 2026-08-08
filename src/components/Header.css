@@ -140,3 +140,93 @@
   border-color: var(--color-amber);
   background-color: rgba(227, 165, 72, 0.1);
 }
+
+/* --- Mobile menu toggle (hidden on desktop) ------------------------------- */
+.header__menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-input);
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.header__menu-bar {
+  display: block;
+  width: 18px;
+  height: 2px;
+  margin-inline: auto;
+  background-color: var(--color-parchment);
+}
+
+/* --- Responsive ------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .header {
+    flex-wrap: wrap;
+    padding: var(--space-md);
+    gap: var(--space-sm);
+  }
+
+  .header__brand {
+    flex: 1 1 auto;
+  }
+
+  .header__menu-toggle {
+    display: inline-flex;
+    order: 2;
+  }
+
+  .header__account {
+    flex: 0 0 auto;
+    order: 3;
+  }
+
+  .header__nav {
+    order: 4;
+    flex: 1 1 100%;
+    display: none;
+    justify-content: stretch;
+  }
+
+  .header__nav--open {
+    display: flex;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-xs);
+    width: 100%;
+  }
+
+  .nav-links li a {
+    display: block;
+    padding: var(--space-sm);
+  }
+
+  .header__user-email {
+    max-width: 120px;
+  }
+}
+
+@media (min-width: 769px) {
+  .header__nav {
+    display: flex;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-sm) var(--space-md);
+  }
+
+  .nav-links li a {
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+}

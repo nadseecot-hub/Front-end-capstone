@@ -1,44 +1,83 @@
-import React from 'react';
-import { NavLink, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import './Header.css';
+"use client";
 
-const Header: React.FC = () => {
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useAuth } from "../context/AuthContext";
+import "./Header.css";
+
+const NAV_LINKS: Array<{ href: string; label: string; exact?: boolean }> = [
+  { href: "/", label: "Home", exact: true },
+  { href: "/saved", label: "Saved Tutors" },
+  { href: "/messages", label: "Messages" },
+  { href: "/leaderboard", label: "Leaderboard" },
+  { href: "/become-a-tutor", label: "Become a Tutor" },
+  { href: "/dashboard", label: "Dashboard" },
+  { href: "/dashboard/profile", label: "Profile" },
+  { href: "/dashboard/bookings", label: "Bookings" },
+  { href: "/dashboard/analytics", label: "Analytics" },
+];
+
+function isLinkActive(pathname: string, href: string, exact?: boolean): boolean {
+  if (exact) {
+    return pathname === href;
+  }
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+export default function Header() {
+  const pathname = usePathname();
   const { user, logout } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const closeMenu = () => setMenuOpen(false);
 
   return (
     <header className="header">
-      {/* Column 1: brand / logo */}
       <div className="header__brand">
-        <Link to="/" className="header__logo" aria-label="TutorFinder — go to home">
+        <Link
+          href="/"
+          className="header__logo"
+          aria-label="TutorFinder — go to home"
+          onClick={closeMenu}
+        >
           TutorFinder
         </Link>
       </div>
 
-      {/* Column 2: primary navigation (centers regardless of brand/icon width) */}
-      <nav className="header__nav" aria-label="Primary">
+      <button
+        type="button"
+        className="header__menu-toggle"
+        aria-expanded={menuOpen}
+        aria-controls="primary-navigation"
+        aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+        onClick={() => setMenuOpen((open) => !open)}
+      >
+        <span className="header__menu-bar" aria-hidden="true" />
+        <span className="header__menu-bar" aria-hidden="true" />
+        <span className="header__menu-bar" aria-hidden="true" />
+      </button>
+
+      <nav
+        id="primary-navigation"
+        className={`header__nav${menuOpen ? " header__nav--open" : ""}`}
+        aria-label="Primary"
+      >
         <ul className="nav-links">
-          <li>
-            <NavLink
-              to="/"
-              end
-              className={({ isActive }) => (isActive ? 'active' : '')}
-            >
-              Home
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/saved-tutors"
-              className={({ isActive }) => (isActive ? 'active' : '')}
-            >
-              Saved Tutors
-            </NavLink>
-          </li>
+          {NAV_LINKS.map(({ href, label, exact }) => (
+            <li key={href}>
+              <Link
+                href={href}
+                className={isLinkActive(pathname, href, exact) ? "active" : ""}
+                onClick={closeMenu}
+              >
+                {label}
+              </Link>
+            </li>
+          ))}
         </ul>
       </nav>
 
-      {/* Column 3: account icon & auth controls */}
       <div className="header__account">
         {user ? (
           <div className="header__user-menu">
@@ -46,17 +85,21 @@ const Header: React.FC = () => {
             <button
               type="button"
               className="header__logout-btn"
-              onClick={logout}
+              onClick={() => {
+                closeMenu();
+                void logout();
+              }}
             >
               Log Out
             </button>
           </div>
         ) : (
           <Link
-            to="/auth"
+            href="/auth"
             className="header__account-icon"
             aria-label="Sign In or Register"
             title="Sign In / Register"
+            onClick={closeMenu}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -80,6 +123,4 @@ const Header: React.FC = () => {
       </div>
     </header>
   );
-};
-
-export default Header;
+}
