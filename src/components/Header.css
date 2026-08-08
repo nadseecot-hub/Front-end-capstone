@@ -1,0 +1,232 @@
+/* ==========================================================================
+   Header — token-driven styles
+   Consumes: src/styles/theme.css
+   ========================================================================== */
+
+.header {
+  /* 3-column flex: brand | nav (centered) | account.
+     Each column flex:1 keeps the nav truly centered regardless of
+     the brand or icon width. */
+  display: flex;
+  align-items: center;
+  background-color: var(--color-ink);
+  color: var(--color-parchment);
+  padding: var(--space-md) var(--space-lg);
+  font-family: var(--font-body);
+}
+
+/* --- Column 1: brand -------------------------------------------------------- */
+.header__brand {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.header__logo {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: var(--color-parchment);
+  text-decoration: none;
+  letter-spacing: 0.2px;
+  transition: color 0.2s ease;
+}
+
+.header__logo:hover,
+.header__logo:focus-visible {
+  color: var(--color-amber);
+  outline: none;
+}
+
+/* --- Column 2: nav (visually centered) ------------------------------------- */
+.header__nav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: var(--space-lg);
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li a {
+  color: var(--color-parchment);
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 1rem;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-input);
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.nav-links li a:hover,
+.nav-links li a:focus-visible {
+  color: var(--color-amber);
+  outline: none;
+}
+
+.nav-links li a.active {
+  color: var(--color-amber);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* --- Column 3: account icon ------------------------------------------------ */
+.header__account {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.header__account-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  color: var(--color-parchment);
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s ease, border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.header__account-icon:hover {
+  color: var(--color-amber);
+  border-color: var(--color-amber);
+}
+
+.header__user-menu {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.header__user-email {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--color-parchment);
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header__logout-btn {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-parchment);
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-input);
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.header__logout-btn:hover {
+  color: var(--color-amber);
+  border-color: var(--color-amber);
+  background-color: rgba(227, 165, 72, 0.1);
+}
+
+/* --- Mobile menu toggle (hidden on desktop) ------------------------------- */
+.header__menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-input);
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.header__menu-bar {
+  display: block;
+  width: 18px;
+  height: 2px;
+  margin-inline: auto;
+  background-color: var(--color-parchment);
+}
+
+/* --- Responsive ------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .header {
+    flex-wrap: wrap;
+    padding: var(--space-md);
+    gap: var(--space-sm);
+  }
+
+  .header__brand {
+    flex: 1 1 auto;
+  }
+
+  .header__menu-toggle {
+    display: inline-flex;
+    order: 2;
+  }
+
+  .header__account {
+    flex: 0 0 auto;
+    order: 3;
+  }
+
+  .header__nav {
+    order: 4;
+    flex: 1 1 100%;
+    display: none;
+    justify-content: stretch;
+  }
+
+  .header__nav--open {
+    display: flex;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-xs);
+    width: 100%;
+  }
+
+  .nav-links li a {
+    display: block;
+    padding: var(--space-sm);
+  }
+
+  .header__user-email {
+    max-width: 120px;
+  }
+}
+
+@media (min-width: 769px) {
+  .header__nav {
+    display: flex;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-sm) var(--space-md);
+  }
+
+  .nav-links li a {
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+}

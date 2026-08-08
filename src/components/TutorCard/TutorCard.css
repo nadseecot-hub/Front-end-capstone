@@ -1,0 +1,275 @@
+/* ==========================================================================
+   TutorCard � token-driven styles
+   Consumes: src/styles/theme.css
+   ========================================================================== */
+
+.tutor-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-md);
+  height: 100%;     /* fill grid cell so all cards in a row are equal height */
+  min-width: 0;     /* let the grid shrink this item below its content size */
+  overflow: hidden; /* clip unbreakable strings instead of breaking the grid */
+  box-shadow: 0 1px 2px rgba(22, 38, 61, 0.04);
+  transition: transform 0.18s ease, box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.tutor-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -16px rgba(22, 38, 61, 0.25),
+    0 4px 8px -4px rgba(22, 38, 61, 0.08);
+  border-color: var(--color-teal);
+}
+
+/* --------------------------------------------------------------------------
+   Top row: level pill (left) + rating + profile icon (right)
+   -------------------------------------------------------------------------- */
+.tutor-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.tutor-card__level {
+  display: inline-block;
+  background-color: var(--color-teal);
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.tutor-card__top-right {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.tutor-card__rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  line-height: 1;
+}
+
+.tutor-card__star {
+  color: var(--color-star);
+  flex-shrink: 0;
+}
+
+.tutor-card__rating-value {
+  font-variant-numeric: tabular-nums;
+}
+
+.tutor-card__profile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+  color: var(--color-ink);
+  background-color: var(--color-parchment);
+  border: 1px solid var(--color-border);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.tutor-card__profile:hover {
+  color: var(--color-amber);
+  border-color: var(--color-amber);
+}
+
+/* --------------------------------------------------------------------------
+   Save button — sits at the right of the top row when an onSave handler
+   is provided. Visual only; the parent decides what "saved" looks like
+   (the card has no idea whether this tutor is already saved, since the
+   decision depends on the current user — which we don't have without auth).
+   -------------------------------------------------------------------------- */
+.tutor-card__save {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  background-color: var(--color-parchment);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 4px 10px;
+  cursor: pointer;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: color 0.15s ease, border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.tutor-card__save:hover:not(:disabled) {
+  color: var(--color-amber-dark);
+  border-color: var(--color-amber);
+  background-color: var(--color-surface);
+}
+
+.tutor-card__save:focus-visible {
+  outline: 2px solid var(--color-amber);
+  outline-offset: 2px;
+}
+
+.tutor-card__save:disabled {
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.tutor-card__save--saved,
+.tutor-card__save--saved:disabled {
+  background-color: var(--color-teal);
+  color: #ffffff;
+  border-color: var(--color-teal);
+  opacity: 1;
+}
+
+.tutor-card__save-icon {
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Name + subject
+   -------------------------------------------------------------------------- */
+.tutor-card__name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.2;
+  color: var(--color-ink);
+  text-align: center;
+  margin: 0 0 var(--space-xs);
+}
+
+.tutor-card__subject {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-align: center;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  margin: 0 0 var(--space-md);
+}
+
+/* --------------------------------------------------------------------------
+   Bio (3-line clamp, no matter the length)
+   -------------------------------------------------------------------------- */
+.tutor-card__bio {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-md);
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --------------------------------------------------------------------------
+   Bottom row: reserved spacer (left) + price (right)
+   -------------------------------------------------------------------------- */
+.tutor-card__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto; /* push to the bottom of the flex column */
+  padding-top: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.tutor-card__bottom-spacer {
+  display: inline-block;
+  width: 1px;
+  height: 1px;
+}
+
+.tutor-card__price {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.375rem;
+  color: var(--color-ink);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.tutor-card__price-unit {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin-left: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Reviews � just above the CTA, left-aligned
+   -------------------------------------------------------------------------- */
+.tutor-card__reviews {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-sm);
+  text-align: left;
+}
+
+/* --------------------------------------------------------------------------
+   CTA
+   -------------------------------------------------------------------------- */
+.tutor-card__cta {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: #ffffff;
+  background-color: var(--color-ink);
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-input);
+  padding: var(--space-sm) var(--space-md);
+  text-decoration: none;
+  box-sizing: border-box;
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    transform 0.05s ease;
+}
+
+.tutor-card__cta:hover {
+  background-color: #213a5c;       /* lighten slightly from --color-ink */
+  border-color: #213a5c;
+}
+
+.tutor-card__cta:focus-visible {
+  outline: 2px solid var(--color-amber);
+  outline-offset: 2px;
+}
+
+.tutor-card__cta:active {
+  transform: translateY(1px);
+}
