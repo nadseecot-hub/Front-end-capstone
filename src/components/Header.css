@@ -4,7 +4,7 @@
    ========================================================================== */
 
 .header {
-  /* 3-column flex: brand | nav (centered) | account.
+  /* 4-column flex: brand | nav (centered) | become-tutor-btn | account.
      Each column flex:1 keeps the nav truly centered regardless of
      the brand or icon width. */
   display: flex;
@@ -77,7 +77,38 @@
   text-underline-offset: 4px;
 }
 
-/* --- Column 3: account icon ------------------------------------------------ */
+/* --- Column 3: Become a Tutor button ---------------------------------------- */
+.header__become-tutor-btn {
+  flex: 0 0 auto;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--color-ink);
+  background-color: var(--color-amber);
+  border: 1px solid var(--color-amber);
+  border-radius: var(--radius-input);
+  padding: var(--space-xs) var(--space-lg);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    transform 0.05s ease;
+  margin: 0 var(--space-sm);
+}
+
+.header__become-tutor-btn:hover {
+  background-color: var(--color-amber-dark);
+  border-color: var(--color-amber-dark);
+}
+
+.header__become-tutor-btn:focus-visible {
+  outline: 2px solid var(--color-amber-dark);
+  outline-offset: 2px;
+}
+
+.header__become-tutor-btn:active {
+  transform: translateY(1px);
+}
+
+/* --- Column 4: account icon ------------------------------------------------ */
 .header__account {
   flex: 1;
   display: flex;
@@ -186,8 +217,15 @@
     order: 3;
   }
 
-  .header__nav {
+  .header__become-tutor-btn {
     order: 4;
+    flex: 1 1 100%;
+    margin: var(--space-sm) 0 0;
+    justify-content: center;
+  }
+
+  .header__nav {
+    order: 5;
     flex: 1 1 100%;
     display: none;
     justify-content: stretch;

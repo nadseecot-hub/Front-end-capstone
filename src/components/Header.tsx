@@ -4,24 +4,27 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "../context/AuthContext";
+import BecomeATutorModal from "./BecomeATutorModal";
 import "./Header.css";
 
 const NAV_LINKS: Array<{ href: string; label: string; exact?: boolean }> = [
   { href: "/", label: "Home", exact: true },
-  { href: "/saved", label: "Saved Tutors" },
-  { href: "/messages", label: "Messages" },
-  { href: "/leaderboard", label: "Leaderboard" },
-  { href: "/become-a-tutor", label: "Become a Tutor" },
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/dashboard/profile", label: "Profile" },
-  { href: "/dashboard/bookings", label: "Bookings" },
-  { href: "/dashboard/analytics", label: "Analytics" },
+  { href: "/search-tutors", label: "Search Tutors", exact: true },
+  { href: "/#about-us", label: "About Us", exact: false },
+  { href: "/#faq", label: "FAQs", exact: false },
+  { href: "/#contact", label: "Contact", exact: false },
 ];
 
 function isLinkActive(pathname: string, href: string, exact?: boolean): boolean {
+  // For anchor links (/#section), we never consider them active in the traditional sense
+  if (href.startsWith("/#")) {
+    return false;
+  }
+  
   if (exact) {
     return pathname === href;
   }
+  
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
@@ -29,6 +32,7 @@ export default function Header() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [tutorModalOpen, setTutorModalOpen] = useState(false);
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -64,6 +68,7 @@ export default function Header() {
         aria-label="Primary"
       >
         <ul className="nav-links">
+          {/* Public nav links (centered) */}
           {NAV_LINKS.map(({ href, label, exact }) => (
             <li key={href}>
               <Link
@@ -79,6 +84,16 @@ export default function Header() {
       </nav>
 
       <div className="header__account">
+        {/* Become a Tutor button (right side, next to account icon) */}
+        <button
+          type="button"
+          className="header__become-tutor-btn"
+          onClick={() => setTutorModalOpen(true)}
+          aria-label="Become a Tutor"
+        >
+          Become a Tutor
+        </button>
+
         {user ? (
           <div className="header__user-menu">
             <span className="header__user-email">{user.email}</span>
@@ -121,6 +136,11 @@ export default function Header() {
           </Link>
         )}
       </div>
+
+      <BecomeATutorModal
+        open={tutorModalOpen}
+        onClose={() => setTutorModalOpen(false)}
+      />
     </header>
   );
 }

@@ -1,121 +1,99 @@
-import { useCallback, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { fetchSavedTutors, getTutors, initialTutors, saveTutor } from './HomeModel';
-import { Tutor, TutorSearchFilters } from '../../services/tutorService';
-import { useAuth } from '../../context/AuthContext';
+import { useCallback, useState } from "react";
+import {
+  faqItems,
+  type ContactFormPayload,
+  validateContactForm,
+} from "./HomeModel";
+
+/* ==========================================================================
+   useHomeViewModel — state + actions for the marketing/landing Home page.
+
+   Two concerns live here:
+     1. The Contact Us form (name / email / message + submit + success/error).
+     2. The FAQ accordion (which item is open).
+
+   Validation rules live in HomeModel; this hook just wires them to React
+   state and exposes everything the View needs.
+   ========================================================================== */
 
 export const useHomeViewModel = () => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-  const userId = user?.uid ?? null;
-
-  const [subject, setSubject] = useState<string>('');
-  const [level, setLevel] = useState<'beginner' | 'intermediate' | 'advanced' | ''>('');
-  const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined);
-  const [userNeed, setUserNeed] = useState<string>('');
-  const [tutors, setTutors] = useState<Tutor[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  /* ---- Contact form ---------------------------------------------------- */
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  // Per-tutor in-flight tracking so each Save button shows its own "Saving…" state.
-  const [savingId, setSavingId] = useState<string | null>(null);
-  const [saveError, setSaveError] = useState<string | null>(null);
-  // Track saved tutor IDs locally, seeded from Firestore on mount.
-  const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
 
-  // Load all tutors and existing saved IDs on initial mount (or on auth change).
-  useEffect(() => {
-    const loadInitial = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const [initial, saved] = await Promise.all([
-          initialTutors(),
-          userId ? fetchSavedTutors(userId).catch(() => []) : Promise.resolve([]),
-        ]);
-        setTutors(initial);
-        setSavedIds(new Set(saved.map((t) => t.id)));
-      } catch (err) {
-        const message = err instanceof Error ? err.message : 'An unknown error occurred';
-        setError(message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadInitial();
-  }, [userId]); // re-run when user signs in or out
-
-  const handleSearch = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const filters: TutorSearchFilters = {};
-      if (subject) filters.subject = subject;
-      if (level) filters.level = level;
-      if (maxPrice !== undefined) filters.maxPrice = maxPrice;
-      const result = await getTutors(filters);
-      setTutors(result);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'An unknown error occurred';
-      setError(message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const resetForm = useCallback(() => {
+    setName("");
+    setEmail("");
+    setMessage("");
+  }, []);
 
   /**
-   * Save a tutor. If the user is not signed in, redirect to /auth instead.
-   * All save logic lives here in the ViewModel — TutorCard fires onSave and
-   * this function decides what to do.
+   * Validate and submit the contact form. Currently a stub that logs the
+   * payload to the console — the real backend integration will be wired up
+   * later (see TODO).
    */
-  const handleSaveTutor = useCallback(
-    async (tutor: Tutor): Promise<void> => {
-      // Guard: redirect unauthenticated users to the auth page.
-      if (!userId) {
-        navigate('/auth');
+  const handleContactSubmit = useCallback(
+    async (event?: { preventDefault?: () => void }): Promise<void> => {
+      event?.preventDefault?.();
+
+      const payload: ContactFormPayload = { name, email, message };
+      const validationErrors = validateContactForm(payload);
+      if (Object.keys(validationErrors).length > 0) {
+        setError(validationErrors.name ?? validationErrors.email ?? validationErrors.message ?? null);
+        setSuccess(false);
         return;
       }
 
-      // Guard: don't double-save.
-      if (savedIds.has(tutor.id)) return;
-
-      setSaveError(null);
-      setSavingId(tutor.id);
+      setSubmitting(true);
+      setError(null);
+      setSuccess(false);
       try {
-        await saveTutor(userId, tutor);
-        setSavedIds((prev) => {
-          const next = new Set(prev);
-          next.add(tutor.id);
-          return next;
-        });
+        // TODO: replace this stub with a real backend / Firestore write.
+        // For now we simulate a network call so the loading + success states
+        // can be exercised end-to-end.
+        // eslint-disable-next-line no-console
+        console.log("Contact form payload (stub):", payload);
+        await new Promise((resolve) => setTimeout(resolve, 600));
+        setSuccess(true);
+        resetForm();
       } catch (err) {
         const message =
-          err instanceof Error ? err.message : 'An unknown error occurred';
-        setSaveError(message);
+          err instanceof Error ? err.message : "Something went wrong. Please try again.";
+        setError(message);
+        setSuccess(false);
       } finally {
-        setSavingId(null);
+        setSubmitting(false);
       }
     },
-    [userId, savedIds, navigate]
+    [name, email, message, resetForm]
   );
 
+  /* ---- FAQ accordion --------------------------------------------------- */
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+
+  const toggleFaq = useCallback((index: number): void => {
+    setOpenFaqIndex((current) => (current === index ? null : index));
+  }, []);
+
   return {
-    subject,
-    setSubject,
-    level,
-    setLevel,
-    maxPrice,
-    setMaxPrice,
-    userNeed,
-    setUserNeeded: setUserNeed,
-    setUserNeed,
-    tutors,
-    loading,
+    /* contact form */
+    name,
+    setName,
+    email,
+    setEmail,
+    message,
+    setMessage,
+    submitting,
+    success,
     error,
-    handleSearch,
-    savingId,
-    saveError,
-    savedIds,
-    handleSaveTutor,
+    handleContactSubmit,
+    /* faq */
+    faqItems,
+    openFaqIndex,
+    toggleFaq,
   };
 };
