@@ -30,4 +30,4 @@ export const getFitSummaryForTutor = async (
     throw new Error(`Tutor with id ${tutorId} not found`);
   }
   return await getFitSummary(userNeed, tutor);
-};
+};;
