@@ -14,7 +14,6 @@ Thumbs.db
 
 # In case any node tooling sneaks back in
 node_modules/
-package-lock.json
 .next/
 out/
 *.tsbuildinfo
