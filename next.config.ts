@@ -14,10 +14,14 @@ const nextConfig: NextConfig = {
   // Keep all generated output outside OneDrive. OneDrive marks files anywhere
   // inside this synced workspace as reparse points, which breaks Next's
   // manifest, diagnostics, and server-file reads with EINVAL.
-  distDir: path.relative(
-    process.cwd(),
-    path.join(os.tmpdir(), "tutorfinder-next-build")
-  ),
+  // Vercel must keep the manifest inside its checkout; local OneDrive builds
+  // use a temp directory to avoid reparse-point readlink failures.
+  distDir: process.env.VERCEL === "1"
+    ? ".next"
+    : path.relative(
+        process.cwd(),
+        path.join(os.tmpdir(), "tutorfinder-next-build")
+      ),
 };
 
 export default nextConfig;
