@@ -1,8 +1,28 @@
+"use client";
+
+import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import AuthView from "@/features/Auth/AuthView";
+
 export default function AuthPage() {
-  return (
-    <section className="page">
-      <h1>Login / Register</h1>
-      <p>Sign in or create an account to save tutors and manage your profile.</p>
-    </section>
-  );
+  const { user, authLoading } = useAuth();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      router.push("/");
+    }
+  }, [user, authLoading, router]);
+
+  if (authLoading) {
+    return null;
+  }
+
+  if (user) {
+    return null;
+  }
+
+  return <AuthView initialMode={searchParams.get("mode") as "login" | "register" | null} />;
 }

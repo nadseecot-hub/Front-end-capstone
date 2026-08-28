@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import {
   faqItems,
+  testimonials,
   type ContactFormPayload,
   validateContactForm,
 } from "./HomeModel";
@@ -75,6 +76,17 @@ export const useHomeViewModel = () => {
   /* ---- FAQ accordion --------------------------------------------------- */
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
+  const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
+  const nextTestimonial = useCallback(() => {
+    setCurrentTestimonialIndex((current) => (current + 1) % testimonials.length);
+  }, []);
+  const previousTestimonial = useCallback(() => {
+    setCurrentTestimonialIndex((current) => (current - 1 + testimonials.length) % testimonials.length);
+  }, []);
+  const goToTestimonial = useCallback((index: number) => {
+    setCurrentTestimonialIndex(Math.max(0, Math.min(index, testimonials.length - 1)));
+  }, []);
+
   const toggleFaq = useCallback((index: number): void => {
     setOpenFaqIndex((current) => (current === index ? null : index));
   }, []);
@@ -95,5 +107,10 @@ export const useHomeViewModel = () => {
     faqItems,
     openFaqIndex,
     toggleFaq,
+    testimonials,
+    currentTestimonialIndex,
+    nextTestimonial,
+    previousTestimonial,
+    goToTestimonial,
   };
 };

@@ -1,6 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useCallback } from 'react';
 import { type User } from 'firebase/auth';
-import { subscribeToAuthChanges, logoutUser } from '../services/authService';
 
 export interface AuthContextType {
   user: User | null;
@@ -11,33 +10,19 @@ export interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [authLoading, setAuthLoading] = useState<boolean>(true);
+  // Authentication is intentionally disabled while the front-end is being built.
+  // Keep the provider API stable so authentication can be restored later without
+  // changing the application shell or dashboard components.
+  const user: User | null = null;
+  const authLoading = false;
 
-  useEffect(() => {
-    const unsubscribe = subscribeToAuthChanges((currentUser) => {
-      setUser(currentUser);
-      setAuthLoading(false);
-    });
-
-    return () => {
-      unsubscribe();
-    };
+  const logout = useCallback(async (): Promise<void> => {
+    return Promise.resolve();
   }, []);
-
-  const logout = async (): Promise<void> => {
-    await logoutUser();
-  };
 
   return (
     <AuthContext.Provider value={{ user, authLoading, logout }}>
-      {authLoading ? (
-        <div className="auth-context-loading" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh', fontFamily: 'var(--font-body)', color: 'var(--color-amber)' }}>
-          Loading authentication session...
-        </div>
-      ) : (
-        children
-      )}
+      {children}
     </AuthContext.Provider>
   );
 };

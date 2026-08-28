@@ -4,6 +4,7 @@ import AppShell from "@/components/AppShell";
 import { ChatWidget } from "@/features/ChatWidget";
 import "../styles/theme.css";
 import "./globals.css";
+import "./status.css";
 
 export const metadata: Metadata = {
   title: "TutorFinder",

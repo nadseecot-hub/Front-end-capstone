@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Tutor } from '../../services/tutorService';
 import './TutorCard.css';
 
@@ -153,7 +153,7 @@ const TutorCard: React.FC<TutorCardProps> = ({ tutor, onSave, saving, isSaved })
       {/* Reviews just above the View Profile button, left-aligned */}
       <p className="tutor-card__reviews">{reviewCount} reviews</p>
 
-      <Link to={`/tutor/${tutor.id}`} className="tutor-card__cta">
+      <Link href={`/tutor/${tutor.id}`} className="tutor-card__cta">
         View Profile
       </Link>
     </article>

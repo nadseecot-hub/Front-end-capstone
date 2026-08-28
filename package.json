@@ -9,14 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^4.0.42",
-    "@ai-sdk/react": "^4.0.69",
-    "ai": "^7.0.66",
     "firebase": "^10.14.1",
     "next": "^15.4.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^7.18.2"
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

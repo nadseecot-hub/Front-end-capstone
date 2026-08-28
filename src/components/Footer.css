@@ -1,0 +1,102 @@
+/* ==========================================================================
+   Footer — token-driven styles
+   Consumes: src/styles/theme.css
+   ========================================================================== */
+
+.footer {
+  background-color: var(--color-ink);
+  color: var(--color-parchment);
+  padding: var(--space-2xl) var(--space-lg);
+}
+
+.footer__inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: var(--space-xl);
+}
+
+.footer__logo {
+  align-self: center;
+}
+
+.footer__logo-link {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: var(--color-parchment);
+  text-decoration: none;
+  letter-spacing: 0.2px;
+}
+
+.footer__logo-link:hover {
+  color: var(--color-amber);
+}
+
+.footer__column h3.footer__heading {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--color-amber);
+  margin: 0 0 var(--space-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.footer__nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.footer__link {
+  color: rgba(250, 246, 239, 0.85);
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  transition: color 0.15s ease, text-decoration 0.15s ease;
+}
+
+.footer__link:hover,
+.footer__link:focus-visible {
+  color: var(--color-amber);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  outline: none;
+}
+
+.footer__bottom {
+  border-top: 1px solid rgba(227, 165, 72, 0.2);
+  padding-top: var(--space-lg);
+  margin-top: var(--space-xl);
+}
+
+.footer__copyright {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: rgba(250, 246, 239, 0.65);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .footer__inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  .footer__column:last-child,
+  .footer__column:nth-last-child(2) {
+    border-top: 1px solid rgba(227, 165, 72, 0.2);
+    padding-top: var(--space-lg);
+  }
+
+  .footer__column h3.footer__heading {
+    margin-top: 0;
+  }
+}

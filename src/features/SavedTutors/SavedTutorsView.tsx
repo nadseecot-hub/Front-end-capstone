@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { useSavedTutorsViewModel } from "./useSavedTutorsViewModel";
 import TutorCard from "../../components/TutorCard/TutorCard";
 import { Tutor } from "../../services/tutorService";
@@ -45,7 +45,7 @@ const SavedTutorsView: React.FC = () => {
             Browse tutors on the home page and tap{" "}
             <strong>Save</strong> to keep track of the ones you like.
           </p>
-          <Link to="/" className="saved-tutors-view__empty-cta">
+          <Link href="/" className="saved-tutors-view__empty-cta">
             Find a tutor
           </Link>
         </div>

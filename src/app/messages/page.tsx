@@ -1,8 +1,2 @@
-export default function MessagesPage() {
-  return (
-    <section className="page">
-      <h1>Messages</h1>
-      <p>Chat with tutors to ask questions and coordinate sessions.</p>
-    </section>
-  );
-}
+import { MessagesPage as TutorMessagesPage } from "@/features/Dashboard/InnerPages";
+export default function MessagesPage() { return <TutorMessagesPage />; }

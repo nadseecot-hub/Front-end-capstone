@@ -11,10 +11,21 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
+.env.*
+!.env.example
+
+# Credentials and private keys
+*.pem
+*.key
+*credentials*.json
+*service-account*.json
+secrets/
 
 # In case any node tooling sneaks back in
 node_modules/
 .next/
+.next-local/
+next-build/
 out/
 *.tsbuildinfo
 .dyad/

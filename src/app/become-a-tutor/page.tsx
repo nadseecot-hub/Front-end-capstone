@@ -1,8 +1,15 @@
+"use client";
+
+import React from "react";
+import BecomeATutorModal from "@/components/BecomeATutorModal";
+import { useState } from "react";
+
 export default function BecomeATutorPage() {
+  const [open, setOpen] = useState(true);
+
   return (
-    <section className="page">
-      <h1>Become a Tutor</h1>
-      <p>Apply to join TutorFinder and start offering sessions to learners.</p>
-    </section>
+    <div className="page">
+      <BecomeATutorModal open={open} onClose={() => setOpen(false)} />
+    </div>
   );
 }

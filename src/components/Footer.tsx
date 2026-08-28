@@ -1,62 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 
-/* ==========================================================================
-   Footer — site-wide, appears on every route below the page content.
-   Mirrors the Header visually: ink background, parchment/white text.
-   ========================================================================== */
+const InstagramIcon = () => <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" /></svg>;
+const LinkedinIcon = () => <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9v10M5 5v.1M10 19v-6a4 4 0 0 1 8 0v6M10 9v10" /></svg>;
+const XIcon = () => <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4l14 16M19 4L5 20" /></svg>;
 
 export default function Footer() {
-  return (
-    <footer className="footer">
-      <div className="footer__inner">
-        <div className="footer__logo">
-          <Link href="/" className="footer__logo-link" aria-label="TutorFinder — go to home">
-            TutorFinder
-          </Link>
-        </div>
-
-        <div className="footer__links">
-          {/* Product column */}
-          <div className="footer__column">
-            <h3 className="footer__heading">Product</h3>
-            <nav className="footer__nav">
-              <Link href="/search-tutors" className="footer__link">
-                Search Tutors
-              </Link>
-              <Link href="/become-a-tutor" className="footer__link">
-                Become a Tutor
-              </Link>
-              <Link href="/leaderboard" className="footer__link">
-                Leaderboard
-              </Link>
-            </nav>
-          </div>
-
-          {/* Company column */}
-          <div className="footer__column">
-            <h3 className="footer__heading">Company</h3>
-            <nav className="footer__nav">
-              <Link href="/" className="footer__link">
-                About Us
-              </Link>
-              <Link href="/#faq" className="footer__link">
-                FAQ
-              </Link>
-              <Link href="/#contact" className="footer__link">
-                Contact
-              </Link>
-            </nav>
-          </div>
-        </div>
-
-        <div className="footer__bottom">
-          <p className="footer__copyright">
-            &copy; {new Date().getFullYear()} TutorFinder. All rights reserved.
-          </p>
-        </div>
-      </div>
-    </footer>
-  );
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  return <footer className="footer footer-redesign"><style>{`.footer-redesign{background:var(--color-ink);color:var(--color-background);padding:var(--space-2xl) var(--space-lg) var(--space-lg)}.footer-redesign .footer__inner{display:grid;grid-template-columns:1.35fr .8fr .8fr 1.25fr;gap:var(--space-xl);max-width:1120px;padding:0;margin:auto}.footer-redesign .footer__brand-logo{display:inline-flex;align-items:center;margin-bottom:var(--space-md);color:var(--color-background);font:700 1.7rem var(--font-display);text-decoration:none}.footer-redesign .footer__brand-tagline{max-width:26ch;margin:0;color:var(--color-background);opacity:.7;font:1rem/1.6 var(--font-body)}.footer-redesign .footer__column h3{margin:0 0 var(--space-md);color:var(--color-primary-soft);font:600 .75rem var(--font-body);letter-spacing:.14em;text-transform:uppercase}.footer-redesign .footer__nav{display:grid;gap:var(--space-sm)}.footer-redesign .footer__link{color:var(--color-background);opacity:.72;font:.9rem var(--font-body);text-decoration:none}.footer-redesign .footer__link:hover{color:var(--color-primary-soft);opacity:1}.footer-redesign .footer__social{display:flex;gap:var(--space-sm);margin-top:var(--space-lg)}.footer-redesign .footer__social a{display:grid;place-items:center;width:34px;height:34px;color:var(--color-background);border:1px solid var(--color-background);border-radius:var(--radius-pill);opacity:.7}.footer-redesign .footer__social a:hover{color:var(--color-primary-soft);border-color:var(--color-primary-soft);opacity:1}.footer-redesign svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.footer-redesign .footer__newsletter{padding:var(--space-lg);background:var(--color-primary-soft);border-radius:var(--radius-card)}.footer-redesign .footer__newsletter h3{margin:0 0 var(--space-sm);color:var(--color-ink);font:700 1.2rem var(--font-display)}.footer-redesign .footer__newsletter p{margin:0 0 var(--space-md);color:var(--color-ink);opacity:.7;font:.85rem/1.5 var(--font-body)}.footer-redesign .footer__newsletter-form{display:flex;gap:var(--space-sm)}.footer-redesign .footer__newsletter input{min-width:0;width:100%;padding:var(--space-sm);color:var(--color-ink);background:var(--color-background);border:0;border-radius:var(--radius-input);font:.85rem var(--font-body)}.footer-redesign .footer__newsletter button{padding:0 var(--space-md);color:var(--color-background);background:var(--color-primary);border:0;border-radius:var(--radius-input);font:600 .85rem var(--font-body);cursor:pointer}.footer-redesign .footer__newsletter button:hover{background:var(--color-primary-dark)}.footer-redesign .footer__bottom{max-width:1120px;margin:var(--space-2xl) auto 0;padding-top:var(--space-lg);border-top:1px solid rgba(255,255,255,.16)}.footer-redesign .footer__copyright{margin:0;color:var(--color-background);opacity:.5;font:.8rem var(--font-body)}@media(max-width:900px){.footer-redesign .footer__inner{grid-template-columns:repeat(2,1fr)}}@media(max-width:640px){.footer-redesign{padding:var(--space-xl) var(--space-md) var(--space-lg)}.footer-redesign .footer__inner{grid-template-columns:1fr;gap:var(--space-lg)}.footer-redesign .footer__bottom{margin-top:var(--space-xl)}.footer-redesign .footer__newsletter-form{flex-direction:column}.footer-redesign .footer__newsletter button{min-height:40px}}`}</style><div className="footer__inner"><div className="footer__brand"><Link href="/" className="footer__brand-logo">TutorFinder</Link><p className="footer__brand-tagline">Find the right tutor for the way you learn.</p><div className="footer__social" aria-label="Social links"><a href="#" aria-label="Instagram"><InstagramIcon /></a><a href="#" aria-label="LinkedIn"><LinkedinIcon /></a><a href="#" aria-label="X"><XIcon /></a></div></div><div className="footer__column"><h3>Explore</h3><nav className="footer__nav"><Link href="/search-tutors" className="footer__link">Search Tutors</Link><Link href="/#about-us" className="footer__link">About Us</Link><Link href="/#why-choose-us" className="footer__link">Why TutorFinder</Link></nav></div><div className="footer__column"><h3>For Tutors</h3><nav className="footer__nav"><Link href="/become-a-tutor" className="footer__link">Become a Tutor</Link><Link href="/auth" className="footer__link">Sign In</Link><Link href="/#faq" className="footer__link">FAQs</Link></nav></div><div className="footer__newsletter"><h3>Stay Updated</h3><p>Occasional notes on learning, tutoring, and making progress.</p><form className="footer__newsletter-form" onSubmit={(event) => { event.preventDefault(); console.log(email); setSubmitted(true); }}><input type="email" value={email} onChange={(event) => { setEmail(event.target.value); setSubmitted(false); }} placeholder="Your email" aria-label="Email address" required /><button type="submit">{submitted ? "Thanks" : "Join"}</button></form></div></div><div className="footer__bottom"><p className="footer__copyright">© {new Date().getFullYear()} TutorFinder. All rights reserved.</p></div></footer>;
 }

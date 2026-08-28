@@ -3,35 +3,52 @@ import { type User } from "firebase/auth";
 import { AuthModel } from "./AuthModel";
 import type { AuthMode } from '../../types';
 
-// Re-export so any view importing AuthMode from here continues to work
 export type { AuthMode } from '../../types';
 
+export type UserRole = "tutor" | "parent-student";
+
 export interface UseAuthViewModelReturn {
+  name: string;
+  setName: (name: string) => void;
   email: string;
   setEmail: (email: string) => void;
   password: string;
   setPassword: (password: string) => void;
+  confirmPassword: string;
+  setConfirmPassword: (password: string) => void;
+  showPassword: boolean;
+  toggleShowPassword: () => void;
+  showConfirmPassword: boolean;
+  toggleShowConfirmPassword: () => void;
   mode: AuthMode;
+  role: UserRole;
   loading: boolean;
   error: string | null;
   handleSubmit: (e?: React.FormEvent) => Promise<User | null>;
   toggleMode: () => void;
+  setRole: (role: UserRole) => void;
 }
 
-/**
- * Custom ViewModel hook for managing Auth screen state and actions.
- */
-export const useAuthViewModel = (): UseAuthViewModelReturn => {
+export const useAuthViewModel = (initialMode?: "login" | "register" | null): UseAuthViewModelReturn => {
+  const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [mode, setMode] = useState<AuthMode>("login");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const [mode, setMode] = useState<AuthMode>(initialMode === "register" ? "register" : "login");
+  const [role, setRole] = useState<UserRole>("parent-student");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const toggleShowPassword = () => setShowPassword((prev) => !prev);
+  const toggleShowConfirmPassword = () => setShowConfirmPassword((prev) => !prev);
 
   const toggleMode = () => {
     setMode((prev) => (prev === "login" ? "register" : "login"));
     setError(null);
     setPassword("");
+    setConfirmPassword("");
   };
 
   const handleSubmit = async (e?: React.FormEvent): Promise<User | null> => {
@@ -40,6 +57,17 @@ export const useAuthViewModel = (): UseAuthViewModelReturn => {
     }
 
     setError(null);
+
+    if (!name.trim()) {
+      setError("Enter your name");
+      return null;
+    }
+
+    if (mode === "register" && password !== confirmPassword) {
+      setError("Passwords do not match");
+      return null;
+    }
+
     setLoading(true);
 
     try {
@@ -50,6 +78,7 @@ export const useAuthViewModel = (): UseAuthViewModelReturn => {
         user = await AuthModel.register(email, password);
       }
       setPassword("");
+      setConfirmPassword("");
       return user;
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
@@ -61,15 +90,25 @@ export const useAuthViewModel = (): UseAuthViewModelReturn => {
   };
 
   return {
+    name,
+    setName,
     email,
     setEmail,
     password,
     setPassword,
+    confirmPassword,
+    setConfirmPassword,
+    showPassword,
+    toggleShowPassword,
+    showConfirmPassword,
+    toggleShowConfirmPassword,
     mode,
+    role,
     loading,
     error,
     handleSubmit,
     toggleMode,
+    setRole,
   };
 };
 
