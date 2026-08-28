@@ -39,10 +39,11 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
+    "..\\..\\..\\..\\..\\AppData\\Local\\Temp\\tutorfinder-next-build/types/**/*.ts",
     ".next/types/**/*.ts",
     "next-build/types/**/*.ts",
     "next-env.d.ts",
-    "..\\..\\..\\..\\..\\AppData\\Local\\Temp\\tutorfinder-next-build/types/**/*.ts"
+    "../../../tmp/tutorfinder-next-build/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import AppShell from "@/components/AppShell";
 import { ChatWidget } from "@/features/ChatWidget";
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <AppShell>{children}</AppShell>
         <ChatWidget />
+        <Analytics />
         <SpeedInsights />
       </body>
     </html>
