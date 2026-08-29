@@ -5,7 +5,7 @@
   --color-ink: #171923; --color-text-muted: #667085; --color-border: #E8E8F0;
   --color-teal: #35B99F; --color-teal-soft: #E9F8F4; --color-warm: #F4B860; --color-warm-soft: #FFF6E6; --color-star: #F5B942;
   --color-white: var(--color-background); --color-text-dark: var(--color-ink); --color-border-subtle: var(--color-border); --color-parchment: var(--color-background); --color-amber: var(--color-primary); --color-amber-dark: var(--color-primary-dark); --color-gold-warm: var(--color-warm); --color-gold-dark: var(--color-primary-dark); --color-cream-warm: var(--color-surface-muted); --color-gray-soft: var(--color-surface-muted); --color-navy-deep: var(--color-ink); --color-navy-light: #232637;
-  --font-display: 'Manrope', sans-serif; --font-heading: 'Manrope', sans-serif; --font-body: 'Inter', sans-serif;
+  --font-display: var(--font-manrope), 'Manrope', sans-serif; --font-heading: var(--font-manrope), 'Manrope', sans-serif; --font-body: var(--font-inter), 'Inter', sans-serif;
   --space-xs: 4px; --space-sm: 8px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px;
   --radius-card: 18px; --radius-input: 11px; --radius-pill: 999px; --shadow-subtle: 0 4px 16px rgba(20, 20, 40, 0.05); --shadow-medium: 0 8px 30px rgba(20, 20, 40, 0.06); --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
