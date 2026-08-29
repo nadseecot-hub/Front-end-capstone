@@ -1,4 +1,5 @@
 import { searchTutors, type Tutor } from "../../services/tutorService";
+import { getPublicTutorProfiles } from "../../services/profileService";
 
 export type TutorBadge = "Top Rated" | "Recommended";
 export type FindTutor = Tutor & { experienceYears: number; region: "Remote"; badge: TutorBadge; tags: string[] };
@@ -24,6 +25,21 @@ const subjectTags: Record<string, string[]> = {
 
 export async function getFindTutors(): Promise<FindTutor[]> {
   const tutors = await searchTutors();
+  try {
+    const publicProfiles = await getPublicTutorProfiles();
+    const firestoreTutors: Tutor[] = publicProfiles.map((profile) => ({
+      id: profile.uid, name: profile.name, subject: profile.subjects.split(",")[0]?.trim() || "Tutor",
+      level: "beginner", bio: profile.bio || "", price: Number(profile.hourlyRate) || 0, rating: 0,
+      availability: profile.availability || "",
+    }));
+    return [...firestoreTutors, ...tutors.filter((tutor) => !firestoreTutors.some((item) => item.id === tutor.id))].map((tutor) => ({
+      ...tutor, experienceYears: tutor.level === "advanced" ? 8 : tutor.level === "intermediate" ? 4 : 1,
+      region: "Remote", badge: tutor.rating >= 4.8 ? "Top Rated" : "Recommended",
+      tags: subjectTags[tutor.subject] ?? [tutor.subject, "Personalized Learning"],
+    }));
+  } catch {
+    // Keep existing discovery available if Firestore is unavailable.
+  }
   return tutors.map((tutor) => ({
     ...tutor,
     experienceYears: tutor.level === "advanced" ? 8 : tutor.level === "intermediate" ? 4 : 1,

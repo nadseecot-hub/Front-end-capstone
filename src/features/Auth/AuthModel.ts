@@ -1,5 +1,7 @@
 import { type User } from "firebase/auth";
 import { registerUser, loginUser, logoutUser } from "../../services/authService";
+import { createUserProfile } from "../../services/profileService";
+import { createTutorAccount } from "../../services/profileService";
 
 /**
  * Validates and normalizes email and password input.
@@ -28,9 +30,18 @@ const validateCredentials = (
 /**
  * Registers a new user after validation.
  */
-export const register = async (email: string, password: string): Promise<User> => {
+export const register = async (email: string, password: string, name = "", role: "student" | "parent" = "student"): Promise<User> => {
   const { normalizedEmail, validPassword } = validateCredentials(email, password);
-  return await registerUser(normalizedEmail, validPassword);
+  const user = await registerUser(normalizedEmail, validPassword);
+  await createUserProfile(user, name || normalizedEmail.split("@")[0], role);
+  return user;
+};
+
+export const registerTutor = async (data: Parameters<typeof createTutorAccount>[1] & { password: string }): Promise<User> => {
+  const { normalizedEmail, validPassword } = validateCredentials(data.email, data.password);
+  const user = await registerUser(normalizedEmail, validPassword);
+  await createTutorAccount(user, data);
+  return user;
 };
 
 /**
@@ -50,6 +61,7 @@ export const logout = async (): Promise<void> => {
 
 export const AuthModel = {
   register,
+  registerTutor,
   login,
   logout,
 };

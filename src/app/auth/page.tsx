@@ -6,15 +6,15 @@ import { useAuth } from "@/context/AuthContext";
 import AuthView from "@/features/Auth/AuthView";
 
 export default function AuthPage() {
-  const { user, authLoading } = useAuth();
+  const { user, authLoading, role } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
     if (!authLoading && user) {
-      router.push("/");
+      router.push(role === "tutor" ? "/dashboard" : "/");
     }
-  }, [user, authLoading, router]);
+  }, [user, authLoading, role, router]);
 
   if (authLoading) {
     return null;

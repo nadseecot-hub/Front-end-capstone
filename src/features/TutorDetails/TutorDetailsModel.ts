@@ -1,4 +1,5 @@
 import { searchTutors, type Tutor } from "../../services/tutorService";
+import { getTutorProfile as getFirestoreTutorProfile } from "../../services/profileService";
 
 export interface TutorReview { name: string; role: "Student" | "Parent"; rating: number; text: string; }
 export type TutorProfile = Omit<Tutor, "availability"> & { reviewCount: number; recommendPercent: number; studentsTaught: number; experienceYears: number; location: string; languages: string[]; education: Array<{ degree: string; school: string; years: string }>; subjects: string[]; availability: Record<string, string[]>; reviews: TutorReview[]; };
@@ -10,6 +11,21 @@ const reviewCopy = [
 ];
 
 export async function getTutorProfile(id: string): Promise<TutorProfile | null> {
+  try {
+    const stored = await getFirestoreTutorProfile(id);
+    if (stored) {
+      const subjects = stored.subjects.split(",").map((item) => item.trim()).filter(Boolean);
+      return {
+        id: stored.uid, name: stored.name, subject: subjects[0] || "Tutor", level: "beginner",
+        bio: stored.bio || "", price: Number(stored.hourlyRate) || 0, rating: 0,
+        reviewCount: 0, recommendPercent: 0, studentsTaught: 0, experienceYears: 0,
+        location: "", languages: [], subjects, education: stored.education ? [{ degree: stored.education, school: "", years: "" }] : [],
+        availability: stored.availability ? { Flexible: [stored.availability] } : {}, reviews: [],
+      };
+    }
+  } catch {
+    // Fall back to the existing public demo dataset when no public profile is available.
+  }
   const tutors = await searchTutors();
   const tutor = tutors.find((item) => item.id === id);
   if (!tutor) return null;

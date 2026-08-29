@@ -10,7 +10,8 @@ const pathData: Record<string, string> = { grid: "M4 4h6v6H4zM14 4h6v6h-6zM4 14h
 function Icon({ name }: { name: string }) { return <svg viewBox="0 0 24 24" aria-hidden="true"><path d={pathData[name] ?? pathData.grid} /></svg>; }
 
 export function DashboardSidebar() {
-  const pathname = usePathname(); const [dialog, setDialog] = useState<"settings" | "help" | null>(null);
+  const pathname = usePathname(); const router = useRouter(); const { user, role, authLoading } = useAuth(); const [dialog, setDialog] = useState<"settings" | "help" | null>(null);
+  useEffect(() => { if (!authLoading && (!user || role !== "tutor")) router.replace(user ? "/" : "/auth"); }, [authLoading, role, router, user]);
   useEffect(() => { const onKey = (e: KeyboardEvent) => e.key === "Escape" && setDialog(null); window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); }, []);
   return <><aside className="dashboard-sidebar" aria-label="Tutor dashboard navigation"><div className="dashboard-sidebar__brand"><span className="dashboard-brand-mark">T</span><span>TutorFinder</span></div><nav className="dashboard-sidebar__nav">{items.map(([href, label, icon]) => <Link className={pathname === href ? "is-active" : ""} href={href} key={label}><Icon name={icon} />{label}{label === "Messages" && <span className="dashboard-nav-badge">5</span>}</Link>)}<button className="dashboard-sidebar__nav-button" onClick={() => setDialog("settings")}><Icon name="settings" />Settings</button></nav><button className="dashboard-sidebar__help" onClick={() => setDialog("help")}><span>?</span>Help Center</button></aside>{dialog && <UtilityDialog kind={dialog} onClose={() => setDialog(null)} />}</>;
 }

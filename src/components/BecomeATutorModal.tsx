@@ -66,7 +66,7 @@ const BecomeATutorModal: React.FC<{
   onClose: () => void; 
 }> = ({ open, onClose }) => {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, role } = useAuth();
   const {
     // Form data
     formData,
@@ -76,6 +76,7 @@ const BecomeATutorModal: React.FC<{
     setPassword,
     setConfirmPassword,
     setBio,
+    setExperience,
     setEducation,
     // Step management
     currentStep,
@@ -95,14 +96,22 @@ const BecomeATutorModal: React.FC<{
     reset,
   } = useTutorRegistrationViewModel();
 
-  // Redirect to dashboard if already authenticated as tutor
+  // Do not close during registration: Firebase auth resolves before the
+  // Firestore role/profile and processing sequence finish.
   useEffect(() => {
-    if (user && open) {
-      // Check if user is a tutor (you might want to implement a proper role check)
-      // For now, we'll just close the modal
+    if (user && open && !isComplete && currentStep !== "processing") {
       onClose();
     }
-  }, [user, open, onClose]);
+  }, [user, open, onClose, currentStep, isComplete]);
+
+  // Redirect only after AuthContext has loaded the tutor role and the
+  // Firestore-backed processing flow has reached completion.
+  useEffect(() => {
+    if (open && isComplete && user && role === "tutor") {
+      onClose();
+      router.push("/dashboard");
+    }
+  }, [open, isComplete, role, router, user, onClose]);
 
   // Lock body scroll while open
   useEffect(() => {
@@ -731,6 +740,11 @@ disabled={!canProceed}
                   />
                 </div>
 
+                <div className="bat-modal__field">
+                  <label htmlFor="bat-experience" className="bat-modal__label">Experience</label>
+                  <input id="bat-experience" type="text" className="bat-modal__input" value={formData.experience || ""} onChange={(e) => setExperience(e.target.value)} placeholder="e.g. 5 years tutoring" />
+                </div>
+
                 <div className="bat-modal__field-group">
                   <div className="bat-modal__field">
                     <label htmlFor="bat-institution" className="bat-modal__label">
@@ -740,6 +754,8 @@ disabled={!canProceed}
                       id="bat-institution"
                       type="text"
                       className="bat-modal__input"
+                      value={formData.education?.institution || ""}
+                      onChange={(e) => setEducation({ ...(formData.education || { institution: "", degree: "", fieldOfStudy: "" }), institution: e.target.value })}
                       placeholder="University, College, or Training Program"
                     />
                   </div>
@@ -751,6 +767,8 @@ disabled={!canProceed}
                       id="bat-degree"
                       type="text"
                       className="bat-modal__input"
+                      value={formData.education?.degree || ""}
+                      onChange={(e) => setEducation({ ...(formData.education || { institution: "", degree: "", fieldOfStudy: "" }), degree: e.target.value })}
                       placeholder="e.g. B.S. Mathematics, TEFL Certification"
                     />
                   </div>
@@ -762,6 +780,8 @@ disabled={!canProceed}
                       id="bat-fieldOfStudy"
                       type="text"
                       className="bat-modal__input"
+                      value={formData.education?.fieldOfStudy || ""}
+                      onChange={(e) => setEducation({ ...(formData.education || { institution: "", degree: "", fieldOfStudy: "" }), fieldOfStudy: e.target.value })}
                       placeholder="e.g. Mathematics, Education, Engineering"
                     />
                   </div>
@@ -773,6 +793,8 @@ disabled={!canProceed}
                       id="bat-year"
                       type="text"
                       className="bat-modal__input"
+                      value={formData.education?.year || ""}
+                      onChange={(e) => setEducation({ ...(formData.education || { institution: "", degree: "", fieldOfStudy: "" }), year: e.target.value })}
                       placeholder="e.g. 2020, 2018-2022"
                     />
                   </div>

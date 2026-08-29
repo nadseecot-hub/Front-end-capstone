@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { type User } from "firebase/auth";
 import { AuthModel } from "./AuthModel";
+import { getUserProfile } from "../../services/profileService";
 import type { AuthMode } from '../../types';
 
 export type { AuthMode } from '../../types';
@@ -58,7 +59,7 @@ export const useAuthViewModel = (initialMode?: "login" | "register" | null): Use
 
     setError(null);
 
-    if (!name.trim()) {
+    if (mode === "register" && !name.trim()) {
       setError("Enter your name");
       return null;
     }
@@ -74,8 +75,17 @@ export const useAuthViewModel = (initialMode?: "login" | "register" | null): Use
       let user: User;
       if (mode === "login") {
         user = await AuthModel.login(email, password);
+        const profile = await getUserProfile(user.uid);
+        const selectedRole = role === "tutor" ? "tutor" : "student";
+        const roleMatches = profile?.role === "tutor"
+          ? selectedRole === "tutor"
+          : selectedRole === "student" && (profile?.role === "student" || profile?.role === "parent");
+        if (!roleMatches) {
+          await AuthModel.logout();
+          throw new Error("This account belongs to a different sign-in type. Choose the correct option and try again.");
+        }
       } else {
-        user = await AuthModel.register(email, password);
+        user = await AuthModel.register(email, password, name, "student");
       }
       setPassword("");
       setConfirmPassword("");

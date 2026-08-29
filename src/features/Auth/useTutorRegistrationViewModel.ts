@@ -1,7 +1,6 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useRef } from "react";
 import { type User } from "firebase/auth";
 import { AuthModel } from "./AuthModel";
-import { registerUser } from "../../services/authService";
 
 export type TutorRegistrationStep =
   | "info"
@@ -18,6 +17,7 @@ export interface TutorRegistrationFormData {
   password: string;
   confirmPassword: string;
   bio?: string;
+  experience?: string;
   education?: {
     institution: string;
     degree: string;
@@ -35,6 +35,7 @@ export interface UseTutorRegistrationViewModelReturn {
   setPassword: (password: string) => void;
   setConfirmPassword: (password: string) => void;
   setBio: (bio: string) => void;
+  setExperience: (experience: string) => void;
   setEducation: (
     education: TutorRegistrationFormData["education"]
   ) => void;
@@ -86,6 +87,7 @@ export const useTutorRegistrationViewModel = (
     ]);
   const [currentProcessingMessageIndex, setCurrentProcessingMessageIndex] =
     useState<number>(0);
+  const processingCleanup = useRef<(() => void) | null>(null);
 
   // Setters for form data
   const setName = useCallback((name: string) => {
@@ -110,6 +112,9 @@ export const useTutorRegistrationViewModel = (
 
   const setBio = useCallback((bio: string) => {
     setFormData((prev) => ({ ...prev, bio }));
+  }, []);
+  const setExperience = useCallback((experience: string) => {
+    setFormData((prev) => ({ ...prev, experience }));
   }, []);
 
   const setEducation = useCallback(
@@ -226,21 +231,22 @@ export const useTutorRegistrationViewModel = (
           return null;
         }
 
-        // Start the visual processing flow immediately. Registration is a
-        // network request and must not prevent the user from seeing progress.
-        setCurrentStep("processing");
-        startProcessingSequence();
-
         try {
-          return await AuthModel.register(formData.email, formData.password);
+          setCurrentStep("processing");
+          startProcessingSequence();
+          const user = await AuthModel.registerTutor(formData);
+          return user;
         } catch (registrationError) {
-          // Keep the application flow moving even when Firebase returns a
-          // client/API error; the UI can still complete its local setup flow.
+          // Keep the processing UI honest: persistence failures are shown to the user.
           const message =
             registrationError instanceof Error
               ? registrationError.message
               : String(registrationError);
           setError(message);
+          processingCleanup.current?.();
+          processingCleanup.current = null;
+          setIsComplete(false);
+          setCurrentStep("review");
           return null;
         }
       } catch (err) {
@@ -257,6 +263,7 @@ export const useTutorRegistrationViewModel = (
 
   // Processing sequence
   const startProcessingSequence = useCallback(() => {
+    processingCleanup.current?.();
     let index = 0;
     setCurrentProcessingMessageIndex(index);
 
@@ -274,11 +281,15 @@ export const useTutorRegistrationViewModel = (
     }, 2500); // Change message every 2.5 seconds
 
     // Cleanup on unmount or if we leave processing step
-    return () => clearInterval(interval);
+    const cleanup = () => clearInterval(interval);
+    processingCleanup.current = cleanup;
+    return cleanup;
   }, [processingMessages]);
 
   // Reset function
   const reset = useCallback(() => {
+    processingCleanup.current?.();
+    processingCleanup.current = null;
     setFormData({
       name: "",
       email: "",
@@ -302,6 +313,7 @@ export const useTutorRegistrationViewModel = (
     setPassword,
     setConfirmPassword,
     setBio,
+    setExperience,
     setEducation,
 
     // Step management

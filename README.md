@@ -23,7 +23,7 @@ This keeps the result art-directed and human rather than producing repeated roun
 - Next.js 15 with the App Router
 - React 18 and TypeScript
 - Tailwind CSS plus semantic CSS custom-property tokens
-- Firebase service boundaries are retained for future integration, but this capstone does not include a connected database or active authentication flow.
+- Firebase Authentication and Firestore are integrated for the tutor/student front-end flows; deployment still requires the project's Firebase environment values and rules.
 - AI SDK/OpenAI chat service boundary with mock/local fallback behavior
 - CSS and inline SVG icons; no carousel or icon package was added
 - MVVM organization for feature screens
@@ -159,7 +159,7 @@ The tutor workspace is available at `/dashboard` and uses the same MVVM and toke
 - Earnings and Reviews inner pages using reusable dashboard cards and mock presentation data.
 - Avatar menu, settings/help dialogs, notification panel, responsive sidebar navigation, and simplified dashboard navbar.
 
-This is a front-end capstone, so dashboard persistence, bookings, messaging, earnings, reviews, and profile updates are intentionally local/mock UI behavior until a backend is added. Authentication is also disabled for this presentation phase; Firebase/auth modules remain isolated as future integration points rather than being used as a requirement for the UI.
+This is a front-end capstone. Firebase Authentication and Firestore now provide role-aware user and tutor profiles, tutor registration, profile updates, and route protection. Bookings, messaging, earnings, reviews, and dashboard metrics do not have backend collections in this capstone, so they safely render empty/local UI states rather than fabricated user activity. No service-account credentials are used in the client.
 
 ## Server-side and client-side relationship
 
@@ -250,11 +250,13 @@ The project writes Next.js build output to the system temporary directory becaus
 ## Known placeholders and future work
 
 - `/images/hero-tutor.jpg` and `/images/about-tutor.jpg` depend on the final supplied image assets.
-- Tutor profile avatars and detailed profile fields should eventually come from Firebase tutor profiles instead of initials/derived fallback data.
+- Authenticated tutor profile fields, education, experience, photo references, and completeness are stored under the tutor's Firebase UID.
 - Booking and message actions navigate to existing routes; backend booking/message workflows can be connected later.
 - Contact and newsletter submissions currently exercise UI state; backend persistence is still a TODO.
 - Social URLs currently use `#` placeholders.
-- Tutor role upgrade and full Firebase tutor retrieval remain roadmap items.
+- Public marketplace discovery continues to use the curated local tutor dataset; private tutor profile data is stored under the authenticated user's Firestore UID.
+- `firestore.rules` restricts user/tutor writes to the authenticated owner and permits only explicitly public tutor profiles in discovery.
+- Tutor login and registration resolve roles from `users/{uid}`, with tutors routed to `/dashboard` and student/parent accounts routed to the public landing experience.
 
 ## Verification status
 
