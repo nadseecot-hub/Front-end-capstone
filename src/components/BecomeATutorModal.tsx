@@ -226,6 +226,14 @@ const BecomeATutorModal: React.FC<{
       flex-direction: column;
     }
 
+    .bat-modal__password-error {
+      margin: var(--space-xs) 0 0;
+      color: var(--color-warm);
+      font-family: var(--font-body);
+      font-size: 0.8125rem;
+      line-height: 1.4;
+    }
+
     .bat-modal__label {
       font-family: var(--font-body);
       font-size: 0.8125rem;
@@ -691,6 +699,11 @@ const BecomeATutorModal: React.FC<{
                     required
                     minLength={6}
                   />
+                  {formData.confirmPassword && formData.confirmPassword !== formData.password && (
+                    <p className="bat-modal__password-error" role="alert">
+                      Passwords don’t match.
+                    </p>
+                  )}
                 </div>
 
                 <div className="bat-modal__form-actions">
