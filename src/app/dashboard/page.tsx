@@ -7,6 +7,7 @@ import { DashboardHeaderActions, DashboardSidebar } from "@/features/Dashboard/D
 import { useAuth } from "@/context/AuthContext";
 import { getTutorProfile, type TutorProfile } from "@/services/profileService";
 import "./dashboard.css";
+import "@/features/Dashboard/dashboard-overrides.css";
 
 type Range = "7D" | "30D" | "90D" | "1Y";
 type BookingTab = "Pending" | "Upcoming" | "Past";

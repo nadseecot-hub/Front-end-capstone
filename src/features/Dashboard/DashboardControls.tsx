@@ -4,6 +4,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import "@/app/dashboard/dashboard.css";
+import "./dashboard-overrides.css";
 
 const items = [["/dashboard", "Overview", "grid"], ["/dashboard/profile", "Profile", "user"], ["/dashboard/bookings", "Bookings", "calendar"], ["/messages", "Messages", "message"], ["/dashboard/reviews", "Reviews", "star"], ["/dashboard/earnings", "Earnings", "chart"]] as const;
 const pathData: Record<string, string> = { grid: "M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z", user: "M20 21a8 8 0 0 0-16 0M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z", calendar: "M5 4v3M19 4v3M4 9h16M5 6h14a1 1 0 0 1 1 1v13H4V7a1 1 0 0 1 1-1Z", message: "M20 11.5a7.5 7.5 0 0 1-8 7.5 8.6 8.6 0 0 1-3-.5L4 20l1.5-4A7.2 7.2 0 0 1 4.5 12 7.5 7.5 0 0 1 12 4.5a7.5 7.5 0 0 1 8 7Z", chart: "M4 19V5M4 19h16M8 16v-5M12 16V7M16 16v-9", star: "m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3", settings: "M9.8 3.7 10.4 2h3.2l.6 1.7 1.5.9 1.8-.3 1.6 2.8-1.2 1.3v1.8l1.2 1.3-1.6 2.8-1.8-.3-1.5.9-.6 1.7h-3.2l-.6-1.7-1.5-.9-1.8.3-1.6-2.8 1.2-1.3V8.4L4.9 7.1l1.6-2.8 1.8.3 1.5-.9ZM12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z", bell: "M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4", heart: "m12 20-1.4-1.3C5.6 14.2 3 11.8 3 8.8A4.8 4.8 0 0 1 7.8 4c1.6 0 3.2.8 4.2 2.1C13 4.8 14.6 4 16.2 4A4.8 4.8 0 0 1 21 8.8c0 3-2.6 5.4-7.6 9.9L12 20Z" };

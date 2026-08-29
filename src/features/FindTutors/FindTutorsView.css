@@ -53,16 +53,17 @@
 @keyframes hire-modal-fade { from { opacity: 0; } to { opacity: 1; } } @keyframes hire-modal-in { from { opacity: 0; transform: translateY(6px) scale(.99); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .hire-tutor-modal, .hire-tutor-modal__card { animation: none; } }
 
-/* Rotating hero copy keeps the existing h1 semantics and layout. */
-.find-tutors-hero h1 { font-size: 0; }
-.find-tutors-hero h1::after { content: "Find Tutors"; display: inline-block; max-width: 100%; white-space: normal; font: 800 clamp(2.8rem, 5vw, 4rem)/1 var(--font-display); letter-spacing: -.06em; animation: find-hero-copy 7.8s ease-in-out infinite paused; }
-.find-tutors-hero.is-visible h1::after { animation-play-state: running; }
-@keyframes find-hero-copy {
-  0%, 27% { content: "Find Tutors"; opacity: 1; transform: translateY(0); }
-  31%, 34% { content: "Find Tutors"; opacity: 0; transform: translateY(-10px); }
-  35%, 61% { content: "Get study notes from experts"; opacity: 1; transform: translateY(0); }
-  65%, 68% { content: "Get study notes from experts"; opacity: 0; transform: translateY(-10px); }
-  69%, 95% { content: "Be #1 in your institute"; opacity: 1; transform: translateY(0); }
-  99%, 100% { content: "Find Tutors"; opacity: 0; transform: translateY(-10px); }
-}
-@media (prefers-reduced-motion: reduce) { .find-tutors-hero h1::after { content: "Find Tutors"; animation: none; opacity: 1; transform: none; } }
+/* Reference-aligned marketplace hierarchy. */
+.find-tutors-eyebrow { font-size: 1rem !important; font-weight: 800; }
+.find-tutors-hero h1 { color: var(--color-ink); font-family: var(--font-heading) !important; font-size: clamp(3.5rem, 5.5vw, 4.75rem) !important; font-weight: 400 !important; line-height: 1.02 !important; letter-spacing: -.02em !important; }
+.find-tutors-hero__count strong { font: 400 1.35rem var(--font-heading); }
+.find-filters__heading h2 { font: 400 1.25rem var(--font-heading); }
+.find-filters legend { font-size: .9rem; }
+.find-filters label:not(.find-select), .find-select select, .find-sort, .find-sort select { font-size: .9rem; }
+.find-tutor-card h3 { font: 400 1.45rem/1.2 var(--font-heading); }
+.find-tutor-card__subject { font-size: .9rem; }
+.find-tutor-card__bio { font-size: .88rem; }
+.find-tutor-card__tags span { font-size: .75rem; }
+.find-tutor-card__footer > strong { font: 400 1.25rem var(--font-heading); }
+.find-tutor-card__hire, .find-tutor-card__details { min-height: 44px; font-size: .8rem; }
+.find-tutor-card__avatar { font-family: var(--font-heading); font-weight: 400; }

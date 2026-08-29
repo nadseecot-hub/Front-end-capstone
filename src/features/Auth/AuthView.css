@@ -295,3 +295,8 @@
     transform: none;
   }
 }
+
+/* Auth hierarchy: prominent page title, readable role choices. */
+.auth-page__heading { font-family: var(--font-heading); font-size: clamp(2.15rem, 4vw, 2.8rem); font-weight: 400; line-height: 1.08; letter-spacing: -.015em; }
+.auth-page__role-tab { font-family: var(--font-body); font-size: 1rem; font-weight: 700; }
+.auth-page__label { font-size: .95rem; font-weight: 700; }

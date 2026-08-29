@@ -68,3 +68,26 @@
 .testimonial__quote-mark { font-size: 32px; }
 .testimonial__avatar { width: 40px; height: 40px; }
 @media (max-width: 640px) { .testimonial { flex-basis: calc(100vw - (var(--space-md) * 2)); width: calc(100vw - (var(--space-md) * 2)); height: 228px; } }
+
+/* Editorial type scale: DM Serif Display is intentionally regular-weight. */
+.hero { min-height: calc(100svh - 78px); display: flex; align-items: center; }
+.hero__inner { width: 100%; }
+.hero__heading { max-width: 11ch; color: var(--color-ink); font-family: var(--font-heading) !important; font-size: clamp(3.3rem, 5.5vw, 5.25rem) !important; font-weight: 400 !important; line-height: .98 !important; letter-spacing: -.025em !important; }
+.section-heading { color: var(--color-ink); font-family: var(--font-heading) !important; font-size: clamp(2.75rem, 4.8vw, 4.25rem) !important; font-weight: 400 !important; line-height: 1.04 !important; letter-spacing: -.015em !important; }
+.animated-text--accent { color: var(--color-primary) !important; font-family: var(--font-body) !important; font-weight: 800 !important; letter-spacing: -.035em; }
+.hero__stat-chip strong, .about__stats strong, .mission-card strong, .why__card h3, .testimonial__name { font-family: var(--font-heading); font-weight: 400; }
+.eyebrow { font-size: .78rem; font-weight: 800; letter-spacing: .16em; }
+.hero__subtext, .about__body, .section-intro > p:last-child, .contact__intro { font-size: 1.1rem; }
+.hero__cta, .why__cta, .contact__submit { min-height: 54px; padding-inline: var(--space-xl); font-size: .95rem; }
+.why__icon { width: 56px; height: 56px; }
+@media (max-width: 920px) { .hero__heading { max-width: 14ch; } }
+@media (max-width: 920px) { .hero { min-height: auto; } }
+@media (min-width: 921px) and (max-height: 800px) { .hero { padding-top: clamp(24px, 5vh, 48px); padding-bottom: clamp(32px, 7vh, 64px); } .hero__media { padding: var(--space-sm); } .hero__heading { font-size: clamp(3rem, 5vw, 4.5rem) !important; } }
+@media (max-width: 640px) { .hero__heading { max-width: 11ch; font-size: clamp(3.1rem, 14vw, 4.35rem) !important; } .section-heading { font-size: clamp(2.5rem, 12vw, 3.4rem) !important; } }
+
+/* Keep the three contact details in their own columns without text collision. */
+.contact__info-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-lg); }
+.contact__info-list > div { min-width: 0; }
+.contact__info-list dt { min-width: 0; white-space: nowrap; }
+.contact__info-list dd { overflow-wrap: anywhere; }
+@media (max-width: 760px) { .contact__info-list { grid-template-columns: 1fr; } }

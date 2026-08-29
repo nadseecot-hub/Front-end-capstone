@@ -72,8 +72,8 @@ The route files stay intentionally thin. They select a feature View and pass rou
 The tokens live in `src/styles/theme.css` and are available to all feature CSS. Tailwind exposes the same font families and token-compatible values.
 
 ```text
-Heading font   Manrope
-Body font      Inter
+Heading font   DM Serif Display
+Body font      Manrope
 
 Primary        #6366F1
 Primary dark   #4F46E5

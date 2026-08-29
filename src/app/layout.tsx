@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Inter, Manrope } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+import { DM_Serif_Display, Manrope } from "next/font/google";
 import AppShell from "@/components/AppShell";
 import DeferredChatWidget from "@/components/DeferredChatWidget";
-const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" });
+const dmSerifDisplay = DM_Serif_Display({ subsets: ["latin"], weight: "400", display: "swap", variable: "--font-dm-serif" });
 const manrope = Manrope({ subsets: ["latin"], display: "swap", variable: "--font-manrope" });
 import "../styles/theme.css";
 import "./globals.css";
@@ -19,11 +17,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${manrope.variable}`}>
+      <body className={`${dmSerifDisplay.variable} ${manrope.variable}`}>
         <AppShell>{children}</AppShell>
         <DeferredChatWidget />
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   );
