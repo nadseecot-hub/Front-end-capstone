@@ -1,6 +1,8 @@
 # TutorFinder
 
-TutorFinder is a Next.js tutoring marketplace for students, parents, and tutors. The product lets learners discover tutors, filter and compare profiles, save tutors, view detailed tutor information, book sessions, and contact tutors.
+## Project Brief
+
+TutorFinder is a frontend-focused tutoring marketplace designed to help students and parents discover suitable tutors while giving tutors a simple way to create and manage their professional profiles. The platform solves the problem of finding relevant tutors through searchable profiles, subject and experience information, role-based authentication, and guided onboarding. An AI-powered assistant also helps users understand how to use the platform and how to find or become a tutor. I chose this idea because tutoring marketplaces involve several real-world frontend challenges—including search, authentication, profiles, role-based experiences, responsive design, accessibility, and meaningful AI integration—while still being small enough to complete as a focused capstone project.
 
 ## Live Application
 
