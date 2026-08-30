@@ -2,6 +2,12 @@
 
 TutorFinder is a Next.js tutoring marketplace for students, parents, and tutors. The product lets learners discover tutors, filter and compare profiles, save tutors, view detailed tutor information, book sessions, and contact tutors.
 
+## Live Application
+
+Production: https://find-your-tutor.vercel.app/
+
+Repository: https://github.com/nadseecot-hub/Front-end-capstone
+
 ## Product and design approach
 
 The interface was rebuilt from the supplied reference images as a composition study. The images were used to understand hierarchy, proportions, whitespace, card grouping, image placement, navigation rhythm, and responsive behavior. Their photography, branding, copy, and unrelated color choices were not copied. Existing TutorFinder content and data remain the source of truth.
@@ -161,6 +167,52 @@ The tutor workspace is available at `/dashboard` and uses the same MVVM and toke
 
 This is a front-end capstone. Firebase Authentication and Firestore now provide role-aware user and tutor profiles, tutor registration, profile updates, and route protection. Bookings, messaging, earnings, reviews, and dashboard metrics do not have backend collections in this capstone, so they safely render empty/local UI states rather than fabricated user activity. No service-account credentials are used in the client.
 
+## AI Integration
+
+TutorFinder includes an AI-powered guidance assistant designed to help users understand and navigate the platform.
+
+The assistant can answer questions such as:
+
+- How can I find a tutor?
+- How do I become a tutor?
+- How does TutorFinder work?
+- What should I do to get started?
+- How can I use the platform's main features?
+
+The AI is integrated through an OpenAI-compatible model and exposed through the application's server-side chat route.
+
+The AI is intentionally used as a platform guidance layer rather than as a generic chatbot. Its purpose is to reduce user confusion and help students, parents, and tutors understand how to use TutorFinder.
+
+The application also includes a local/mock fallback so the interface can continue to demonstrate its behavior when the AI service is unavailable.
+
+
+## Authentication & User Roles
+
+TutorFinder uses Firebase Authentication with Firestore-backed role management.
+
+Supported roles:
+
+- Tutor
+- Student
+- Parent
+
+### Tutor flow
+
+1. A user completes the Become a Tutor form.
+2. Firebase Authentication creates the account.
+3. A corresponding `users/{uid}` document stores the user's role.
+4. A `tutors/{uid}` document stores the tutor profile.
+5. The authenticated role is confirmed before routing.
+6. Tutors are redirected to `/dashboard`.
+
+### Student/Parent flow
+
+Student and parent accounts are routed to the public application experience rather than the tutor dashboard.
+
+Tutor dashboard access is protected by the authenticated Firebase UID and Firestore role.
+
+Firestore security rules restrict user/tutor writes to the authenticated owner.
+
 ## Server-side and client-side relationship
 
 Next.js Server Components are the default. Route `page.tsx` files can receive dynamic route parameters and render the correct feature without shipping unnecessary page logic to the browser. `layout.tsx` provides document metadata and the shared application shell.
@@ -173,6 +225,34 @@ Client Components are used only where browser interaction is required:
 - `ChatWidget`: interactive client chat UI
 
 Server-side boundaries include the App Router pages, root metadata, and `src/app/api/chat/route.ts`. Firebase and tutor service modules provide replaceable data boundaries. The current tutor marketplace uses a clean local mock dataset, making a later Firebase query possible without rewriting the presentation layer.
+
+## Performance & Accessibility
+
+The application was tested using Google Lighthouse against the production deployment.
+
+### Lighthouse Results
+
+| Category | Desktop | Mobile |
+|---|---:|---:|
+| Performance | 100 | 99 |
+| Accessibility | 93 | 93 |
+| Best Practices | 100 | 100 |
+| SEO | 100 | 100 |
+
+### Performance improvements
+
+Several performance improvements were made during development:
+
+- Reduced unnecessary client-side JavaScript by moving static Home page content toward Server Components.
+- Isolated interactive sections into smaller Client Components.
+- Lazy-loaded the tutor modal so it is only loaded when required.
+- Deferred Firebase authentication initialization on the Home route.
+- Added responsive image sizing.
+- Prioritized the main Hero image.
+- Added a Firebase preconnect hint.
+- Preserved zero Cumulative Layout Shift and zero Total Blocking Time in the final Lighthouse run.
+
+The final production Lighthouse run reached 100 Performance on Desktop and 99 Performance on Mobile.
 
 ## SEO and accessibility
 
@@ -258,6 +338,88 @@ The project writes Next.js build output to the system temporary directory becaus
 - `firestore.rules` restricts user/tutor writes to the authenticated owner and permits only explicitly public tutor profiles in discovery.
 - Tutor login and registration resolve roles from `users/{uid}`, with tutors routed to `/dashboard` and student/parent accounts routed to the public landing experience.
 
+## Testing
+
+No automated unit, integration, or end-to-end test suite was added to this capstone.
+
+Instead, the application was validated through:
+
+- Production builds with `npm run build`
+- `git diff --check`
+- Manual authentication flows
+- Tutor registration and role validation
+- Tutor profile persistence through Firestore
+- Tutor dashboard access protection
+- Find Tutors filtering and navigation
+- Tutor details loading
+- Responsive testing across desktop and mobile layouts
+- Lighthouse performance, accessibility, SEO, and best-practice audits
+
+Automated testing is a planned future improvement, particularly for authentication, tutor registration, profile persistence, and protected dashboard routes.
+
+
+## Deployment & Rollback
+
+TutorFinder is deployed to Vercel and the production application is available at:
+
+https://find-your-tutor.vercel.app/
+
+### Deployment checklist
+
+Before production deployment:
+
+- [x] Production build completes successfully
+- [x] Firebase Authentication configuration verified
+- [x] Firestore configuration and security rules verified
+- [x] Environment variables configured
+- [x] Authentication flows manually tested
+- [x] Tutor registration tested
+- [x] Role-based dashboard access tested
+- [x] Responsive layouts checked
+- [x] Lighthouse audit completed
+- [x] Production URL verified
+
+### Rollback plan
+
+The project is maintained in Git and deployed through Vercel.
+
+If a production deployment introduces a regression:
+
+1. Identify the last known-good Git commit/deployment.
+2. Revert the problematic change or redeploy the previous working commit.
+3. Verify the production URL and critical authentication flows.
+4. Re-run the production build and Lighthouse checks before continuing development.
+
+This provides a simple rollback path without requiring a separate infrastructure system.
+
+## Known Limitations
+
+TutorFinder is intentionally scoped as a frontend-focused capstone with selected Firebase functionality.
+
+Currently implemented with Firebase:
+
+- Authentication
+- Tutor registration
+- Role-based access
+- Tutor profile persistence
+- Education and experience data
+- Profile completeness
+- Firestore ownership rules
+- Public tutor discovery
+
+The following features currently use mock/local presentation data because their backend systems have not been implemented:
+
+- Bookings and session management
+- Real-time messaging
+- Earnings
+- Reviews
+- Dashboard activity/analytics
+- Notifications
+
+The messaging and booking interfaces are therefore demonstrations of the intended frontend experience rather than production backend workflows.
+
+Future work would include implementing the corresponding Firestore collections/backend services, real-time conversations, booking/session state management, notifications, and automated testing.
+
 ## Verification status
 
 - Home, Find Tutors, and Tutor Details use the shared token/font system.
@@ -267,3 +429,14 @@ The project writes Next.js build output to the system temporary directory becaus
 - No new carousel/icon UI dependency was added.
 - Unused legacy TutorDetail files were removed only after confirming they were not imported.
 - `npm run build` passes with zero errors.
+
+
+## Reflection
+
+The hardest part of this project was not simply writing the interface; it was repeatedly debugging and refining the design, authentication flow, and performance. I changed the design and layout more than five times before reaching a result that felt right. Authentication was another major challenge because the application needed to distinguish between tutor, student, and parent roles while keeping dashboard access protected.
+
+The performance work was also challenging. Lighthouse initially exposed significant mobile performance problems, particularly around rendering, Firebase initialization, image delivery, and unnecessary client-side JavaScript. I had to inspect the application architecture rather than simply changing visual components. Moving appropriate content toward Server Components, isolating interactive sections, optimizing images, and deferring authentication initialization eventually brought the production Lighthouse Performance score to 100 on desktop and 99 on mobile.
+
+If I were starting the project again, I would design and build the authentication architecture first and then connect it to the UI. I would also spend more time planning the application structure before writing components. Working with coding agents taught me that planning and inspection are just as important as implementation. Instead of immediately asking an agent to build something, inspecting the existing code, defining the exact design requirements, and giving the agent a detailed implementation prompt produced much better results.
+
+One thing that surprised me was how much better the development process became when I switched from simply generating code to treating the coding agent as an implementation partner. I remember moving from Claude to Codex, inspecting the project, preparing a detailed design and implementation prompt, and then giving it to Codex. The resulting implementation was much closer to what I wanted than my earlier iterations. That experience taught me that AI coding tools are most effective when the developer provides clear planning, constraints, context, and acceptance criteria before implementation begins.
