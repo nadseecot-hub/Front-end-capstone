@@ -23,6 +23,7 @@ secrets/
 
 # In case any node tooling sneaks back in
 node_modules/
+coverage/
 .next/
 .next-local/
 next-build/
